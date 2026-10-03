@@ -1,2 +1,178 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Hello World</title>
+
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+
+  <body>
+
+    <header>
+      <nav class="bg-gray-100 px-6 py-2">
+        <div class="flex items-center">
+
+          <a href="/" class="mr-6 text-lg font-semibold text-gray-800">
+            Shopping Cart
+          </a>
+
+          <a href="/" class="mr-5 text-sm text-gray-800">
+            Home
+          </a>
+
+          <a
+            href="/link"
+            class="mr-5 text-sm text-gray-600 hover:text-gray-900"
+          >
+            Link
+          </a>
+
+          <span class="text-sm text-gray-400">
+            Disabled
+          </span>
+
+          <form class="ml-auto flex" action="/search" method="GET">
+            <input
+              type="text"
+              name="q"
+              placeholder="Search"
+              class="w-28 border border-gray-300 px-2 py-1 text-sm"
+            />
+
+            <button
+              type="submit"
+              class="ml-1 border border-green-500 px-3 py-1 text-sm text-green-600 hover:bg-green-500 hover:text-white"
+            >
+              Search
+            </button>
+          </form>
+
+        </div>
+      </nav>
+    </header>
+
+    <section>
+      <div class="container mt-16 ml-35">
+        <div class="row grid grid-cols-4 gap-6">
+          <div class="w-72 overflow-hidden rounded-lg bg-white shadow-md">
+
+            <!-- Product Image -->
+            <img
+              src="https://imgs.search.brave.com/IY7oWARNmQsr3FYrltqJbx2ui6ZvJjA8WE5JebFc2d4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9waXNj/ZXMuYmJ5c3RhdGlj/LmNvbS9pbWFnZTIv/QmVzdEJ1eV9VUy9k/YW0vUkVGLTI2NTgz/NTAtbmF2LWRlcHQt/bGl2ZWx5X0RFUi05/NTYzNTQ5Ni1iNTVi/LTQwZmItOWE5Mi0y/NGRmNGJkOWZkMmIu/anBnO21heEhlaWdo/dD0yNTI7bWF4V2lk/dGg9MjUyP2Zvcm1h/dD13ZWJw"
+              alt="Product"
+              class="h-32 w-full object-cover"
+            />
+
+            <!-- Card Content -->
+            <div class="p-3">
+
+              <h2 class="my-1 text-lg font-semibold text-gray-800">
+                Real me            
+                  </h2>
+
+              <p class="mb-2 text-sm text-gray-500">
+                This is a simple description of the product.
+              </p>
+
+              <div class="mb-4 flex items-center justify-between">
+                <span class="text-xl font-bold text-gray-800">
+                  ₹999
+                </span>
+
+                <span class="text-sm text-green-600">
+                  In Stock
+                </span>
+              </div>
+
+              <button
+                class="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+              >
+                Add to Cart
+              </button>
+
+            </div>
+          </div>
+          <div class="w-72 overflow-hidden rounded-lg bg-white shadow-md">
+
+            <!-- Product Image -->
+            <img
+              src="https://imgs.search.brave.com/IY7oWARNmQsr3FYrltqJbx2ui6ZvJjA8WE5JebFc2d4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9waXNj/ZXMuYmJ5c3RhdGlj/LmNvbS9pbWFnZTIv/QmVzdEJ1eV9VUy9k/YW0vUkVGLTI2NTgz/NTAtbmF2LWRlcHQt/bGl2ZWx5X0RFUi05/NTYzNTQ5Ni1iNTVi/LTQwZmItOWE5Mi0y/NGRmNGJkOWZkMmIu/anBnO21heEhlaWdo/dD0yNTI7bWF4V2lk/dGg9MjUyP2Zvcm1h/dD13ZWJw"
+              alt="Product"
+              class="h-32 w-full object-cover"
+            />
+
+            <!-- Card Content -->
+            <div class="p-3">
+
+              <h2 class="my-1 text-lg font-semibold text-gray-800">
+                Real me            
+                  </h2>
+
+              <p class="mb-2 text-sm text-gray-500">
+                This is a simple description of the product.
+              </p>
+
+              <div class="mb-4 flex items-center justify-between">
+                <span class="text-xl font-bold text-gray-800">
+                  ₹999
+                </span>
+
+                <span class="text-sm text-green-600">
+                  In Stock
+                </span>
+              </div>
+              <button
+                class="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+              >
+                Add to Cart
+              </button>
+
+            </div>
+          </div>
+          <div class="w-72 overflow-hidden rounded-lg bg-white shadow-md">
+
+            <!-- Product Image -->
+            <img
+              src="https://imgs.search.brave.com/IY7oWARNmQsr3FYrltqJbx2ui6ZvJjA8WE5JebFc2d4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9waXNj/ZXMuYmJ5c3RhdGlj/LmNvbS9pbWFnZTIv/QmVzdEJ1eV9VUy9k/YW0vUkVGLTI2NTgz/NTAtbmF2LWRlcHQt/bGl2ZWx5X0RFUi05/NTYzNTQ5Ni1iNTVi/LTQwZmItOWE5Mi0y/NGRmNGJkOWZkMmIu/anBnO21heEhlaWdo/dD0yNTI7bWF4V2lk/dGg9MjUyP2Zvcm1h/dD13ZWJw"
+              alt="Product"
+              class="h-32 w-full object-cover"
+            />
+
+            <!-- Card Content -->
+            <div class="p-3">
+
+              <h2 class="my-1 text-lg font-semibold text-gray-800">
+                Real me            
+                  </h2>
+
+              <p class="mb-2 text-sm text-gray-500">
+                This is a simple description of the product.
+              </p>
+
+              <div class="mb-4 flex items-center justify-between">
+                <span class="text-xl font-bold text-gray-800">
+                  ₹999
+                </span>
+
+                <span class="text-sm text-green-600">
+                  In Stock
+                </span>
+              </div>
+
+              <button
+                class="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+              >
+                Add to Cart
+              </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </body>
+</html>
