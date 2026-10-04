@@ -1,0 +1,62 @@
+<body class="bg-white">
+
+  <div class="mx-auto mt-6 max-w-6xl">
+
+    <!-- Add Product button -->
+    <div class="mt-4 flex justify-end">
+      <a
+        href="/admin/add-product"
+        class="inline-block rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700"
+      >
+        Add Product
+      </a>
+    </div>
+
+    <!-- Products table -->
+    <table class="mt-5 w-full text-left text-sm">
+
+      <thead>
+        <tr class="border-b border-gray-300">
+          <th class="px-3 py-3 font-semibold text-gray-800">No</th>
+          <th class="px-3 py-3 font-semibold text-gray-800">Title</th>
+          <th class="px-3 py-3 font-semibold text-gray-800">Category</th>
+          <th class="px-3 py-3 font-semibold text-gray-800">Description</th>
+          <th class="px-3 py-3 font-semibold text-gray-800">Image</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {{#each products}}
+
+          <tr class="border-b border-gray-200">
+            <td class="px-3 py-3">3</td>
+
+            <td class="px-3 py-3">
+              {{this.name}}
+            </td>
+
+            <td class="px-3 py-3">
+              {{this.category}}
+            </td>
+
+            <td class="px-3 py-3">
+              {{this.description}}
+            </td>
+
+            <td class="px-3 py-3">
+              <img
+                src="{{this.image}}"
+                alt="{{this.name}}"
+                class="h-16 w-15 object-cover"
+              />
+            </td>
+          </tr>
+
+        {{/each}}
+      </tbody>
+
+    </table>
+
+  </div>
+
+</body>
