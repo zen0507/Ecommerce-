@@ -55,13 +55,14 @@
     </header>
 
     <section>
-      <div class="container mt-16 ml-35">
-        <div class="row grid grid-cols-4 gap-6">
+      <div class=" mt-16 px-6">
+        <div class="grid grid-cols-3 gap-6 pl-30">
+          {{#each products}}
           <div class="w-72 overflow-hidden rounded-lg bg-white shadow-md">
 
             <!-- Product Image -->
             <img
-              src="https://imgs.search.brave.com/IY7oWARNmQsr3FYrltqJbx2ui6ZvJjA8WE5JebFc2d4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9waXNj/ZXMuYmJ5c3RhdGlj/LmNvbS9pbWFnZTIv/QmVzdEJ1eV9VUy9k/YW0vUkVGLTI2NTgz/NTAtbmF2LWRlcHQt/bGl2ZWx5X0RFUi05/NTYzNTQ5Ni1iNTVi/LTQwZmItOWE5Mi0y/NGRmNGJkOWZkMmIu/anBnO21heEhlaWdo/dD0yNTI7bWF4V2lk/dGg9MjUyP2Zvcm1h/dD13ZWJw"
+              src = "{{this.image}}"
               alt="Product"
               class="h-32 w-full object-cover"
             />
@@ -70,16 +71,15 @@
             <div class="p-3">
 
               <h2 class="my-1 text-lg font-semibold text-gray-800">
-                Real me            
-                  </h2>
+                {{this.name}}                  </h2>
 
               <p class="mb-2 text-sm text-gray-500">
-                This is a simple description of the product.
+                {{this.description}}
               </p>
 
               <div class="mb-4 flex items-center justify-between">
                 <span class="text-xl font-bold text-gray-800">
-                  ₹999
+                  ${{this.price}}
                 </span>
 
                 <span class="text-sm text-green-600">
@@ -88,88 +88,13 @@
               </div>
 
               <button
-                class="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-              >
+                class="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
                 Add to Cart
               </button>
 
             </div>
           </div>
-          <div class="w-72 overflow-hidden rounded-lg bg-white shadow-md">
-
-            <!-- Product Image -->
-            <img
-              src="https://imgs.search.brave.com/IY7oWARNmQsr3FYrltqJbx2ui6ZvJjA8WE5JebFc2d4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9waXNj/ZXMuYmJ5c3RhdGlj/LmNvbS9pbWFnZTIv/QmVzdEJ1eV9VUy9k/YW0vUkVGLTI2NTgz/NTAtbmF2LWRlcHQt/bGl2ZWx5X0RFUi05/NTYzNTQ5Ni1iNTVi/LTQwZmItOWE5Mi0y/NGRmNGJkOWZkMmIu/anBnO21heEhlaWdo/dD0yNTI7bWF4V2lk/dGg9MjUyP2Zvcm1h/dD13ZWJw"
-              alt="Product"
-              class="h-32 w-full object-cover"
-            />
-
-            <!-- Card Content -->
-            <div class="p-3">
-
-              <h2 class="my-1 text-lg font-semibold text-gray-800">
-                Real me            
-                  </h2>
-
-              <p class="mb-2 text-sm text-gray-500">
-                This is a simple description of the product.
-              </p>
-
-              <div class="mb-4 flex items-center justify-between">
-                <span class="text-xl font-bold text-gray-800">
-                  ₹999
-                </span>
-
-                <span class="text-sm text-green-600">
-                  In Stock
-                </span>
-              </div>
-              <button
-                class="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-              >
-                Add to Cart
-              </button>
-
-            </div>
-          </div>
-          <div class="w-72 overflow-hidden rounded-lg bg-white shadow-md">
-
-            <!-- Product Image -->
-            <img
-              src="https://imgs.search.brave.com/IY7oWARNmQsr3FYrltqJbx2ui6ZvJjA8WE5JebFc2d4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9waXNj/ZXMuYmJ5c3RhdGlj/LmNvbS9pbWFnZTIv/QmVzdEJ1eV9VUy9k/YW0vUkVGLTI2NTgz/NTAtbmF2LWRlcHQt/bGl2ZWx5X0RFUi05/NTYzNTQ5Ni1iNTVi/LTQwZmItOWE5Mi0y/NGRmNGJkOWZkMmIu/anBnO21heEhlaWdo/dD0yNTI7bWF4V2lk/dGg9MjUyP2Zvcm1h/dD13ZWJw"
-              alt="Product"
-              class="h-32 w-full object-cover"
-            />
-
-            <!-- Card Content -->
-            <div class="p-3">
-
-              <h2 class="my-1 text-lg font-semibold text-gray-800">
-                Real me            
-                  </h2>
-
-              <p class="mb-2 text-sm text-gray-500">
-                This is a simple description of the product.
-              </p>
-
-              <div class="mb-4 flex items-center justify-between">
-                <span class="text-xl font-bold text-gray-800">
-                  ₹999
-                </span>
-
-                <span class="text-sm text-green-600">
-                  In Stock
-                </span>
-              </div>
-
-              <button
-                class="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-              >
-                Add to Cart
-              </button>
-
-            </div>
-          </div>
+          {{/each}}
         </div>
       </div>
     </section>

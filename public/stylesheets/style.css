@@ -207,14 +207,11 @@
   .my-1 {
     margin-block: calc(var(--spacing) * 1);
   }
-  .mt-5 {
-    margin-top: calc(var(--spacing) * 5);
-  }
-  .mt-8 {
-    margin-top: calc(var(--spacing) * 8);
-  }
   .mt-16 {
     margin-top: calc(var(--spacing) * 16);
+  }
+  .mr-0 {
+    margin-right: calc(var(--spacing) * 0);
   }
   .mr-5 {
     margin-right: calc(var(--spacing) * 5);
@@ -231,9 +228,6 @@
   .ml-1 {
     margin-left: calc(var(--spacing) * 1);
   }
-  .ml-5 {
-    margin-left: calc(var(--spacing) * 5);
-  }
   .ml-35 {
     margin-left: calc(var(--spacing) * 35);
   }
@@ -249,23 +243,8 @@
   .table {
     display: table;
   }
-  .h-1 {
-    height: calc(var(--spacing) * 1);
-  }
-  .h-1\/2 {
-    height: calc(1 / 2 * 100%);
-  }
   .h-32 {
     height: calc(var(--spacing) * 32);
-  }
-  .h-38 {
-    height: calc(var(--spacing) * 38);
-  }
-  .h-48 {
-    height: calc(var(--spacing) * 48);
-  }
-  .min-h-screen {
-    min-height: 100vh;
   }
   .w-28 {
     width: calc(var(--spacing) * 28);
@@ -288,17 +267,20 @@
   .grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
-  .flex-wrap {
-    flex-wrap: wrap;
-  }
   .items-center {
     align-items: center;
   }
   .justify-between {
     justify-content: space-between;
   }
-  .justify-center {
-    justify-content: center;
+  .gap-2 {
+    gap: calc(var(--spacing) * 2);
+  }
+  .gap-3 {
+    gap: calc(var(--spacing) * 3);
+  }
+  .gap-5 {
+    gap: calc(var(--spacing) * 5);
   }
   .gap-6 {
     gap: calc(var(--spacing) * 6);
@@ -337,9 +319,6 @@
   .p-3 {
     padding: calc(var(--spacing) * 3);
   }
-  .p-5 {
-    padding: calc(var(--spacing) * 5);
-  }
   .px-2 {
     padding-inline: calc(var(--spacing) * 2);
   }
@@ -358,9 +337,17 @@
   .py-2 {
     padding-block: calc(var(--spacing) * 2);
   }
-  .text-5xl {
-    font-size: var(--text-5xl);
-    line-height: var(--tw-leading, var(--text-5xl--line-height));
+  .pl-8 {
+    padding-left: calc(var(--spacing) * 8);
+  }
+  .pl-16 {
+    padding-left: calc(var(--spacing) * 16);
+  }
+  .pl-25 {
+    padding-left: calc(var(--spacing) * 25);
+  }
+  .pl-30 {
+    padding-left: calc(var(--spacing) * 30);
   }
   .text-lg {
     font-size: var(--text-lg);
@@ -381,9 +368,6 @@
   .font-semibold {
     --tw-font-weight: var(--font-weight-semibold);
     font-weight: var(--font-weight-semibold);
-  }
-  .text-blue-600 {
-    color: var(--color-blue-600);
   }
   .text-gray-400 {
     color: var(--color-gray-400);
