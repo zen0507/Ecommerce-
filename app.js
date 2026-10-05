@@ -8,6 +8,7 @@ var {engine} = require("express-handlebars");
 var userRouter = require("./routes/user");
 var adminRouter = require("./routes/admin");
 
+var db=require("./config/connection");
 var app = express();
 var fileUpload = require("express-fileupload");
 // view engine setup
@@ -29,8 +30,24 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(fileUpload());
+console.log("Before database connection");
+
+db.connect((err) => {
+    console.log("Callback executed");
+
+    if (err) {
+        console.log("Connection Error: " + err);
+    } else {
+        console.log("Database connected successfully");
+    }
+});
+
+console.log("After database connection");
+
+
 app.use("/", userRouter);
 app.use("/admin", adminRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
