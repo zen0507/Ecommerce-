@@ -33,8 +33,6 @@ app.use(fileUpload());
 console.log("Before database connection");
 
 db.connect((err) => {
-    console.log("Callback executed");
-
     if (err) {
         console.log("Connection Error: " + err);
     } else {
@@ -42,7 +40,6 @@ db.connect((err) => {
     }
 });
 
-console.log("After database connection");
 
 
 app.use("/", userRouter);
