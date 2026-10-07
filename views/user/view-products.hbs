@@ -1,0 +1,48 @@
+
+
+    <section>
+      <div class=" mt-16 px-6">
+        <div class="grid grid-cols-3 gap-6 pl-30">
+          {{#each products}}
+          <div class="w-72 overflow-hidden rounded-lg bg-white shadow-md">
+
+            <!-- Product Image -->
+            <img
+                src="/product-images/{{this._id}}.jpg"
+              alt="Product"
+              class="h-32 w-half object-cover mx-auto"
+            />
+
+            <!-- Card Content -->
+            <div class="p-3">
+
+              <h2 class="my-1 text-lg font-semibold text-gray-800">
+                {{this.name}}                  </h2>
+
+              <p class="mb-2 text-sm text-gray-500">
+                {{this.description}}
+              </p>
+
+              <div class="mb-4 flex items-center justify-between">
+                <span class="text-xl font-bold text-gray-800">
+                  ${{this.price}}
+                </span>
+
+                <span class="text-sm text-green-600">
+                  In Stock
+                </span>
+              </div>
+
+              <button
+                class="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
+                Add to Cart
+              </button>
+
+            </div>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+    </section>
+
+  
