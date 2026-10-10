@@ -25,4 +25,17 @@ router.post('/signup',(req,res)=>{
   })
 
 })
+
+router.post('/login',(req,res)=>{
+userHelpers.doLogin(req.body).then((response)=>{
+  if(response.status)
+  {
+    res.redirect('/')
+  }
+  else{
+    res.redirect('/login');
+  }
+})
+
+})
 module.exports = router;
