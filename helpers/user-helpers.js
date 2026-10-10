@@ -2,7 +2,6 @@
         var db = require('../config/connection')
         var collections = require('../config/collections')
         const bcrypt = require('bcrypt');
-const { response } = require('express');
 
         module.exports = {
             doSignup:(userData)=>{
@@ -17,17 +16,14 @@ const { response } = require('express');
             },
             doLogin:(userData)=>{
                 return new Promise(async(resolve,reject)=>{
-                    let loginStatus = false;
                     let user = await db.getDb().collection(collections.USER_COLLECTION).findOne({email:userData.email});
                     if(user)
                     {
-                        bcrypt.compare(userData.password,user.password).then((status)=>{
+                        bcrypt.compare(userData.password, user.password).then((status)=>{
                             if(status)
                             {
                                 console.log("login success");
-                                response.user = user;
-                                response.status = true;
-                                resolve(response);
+                                resolve({status: true, user});
                             }
                             else{
                                 console.log("login failed");
@@ -38,6 +34,7 @@ const { response } = require('express');
                     }
                     else{
                         console.log("login failed");
+                        resolve({status:false});
                     }
                     })
             }

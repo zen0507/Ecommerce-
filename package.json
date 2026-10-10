@@ -6,6 +6,11 @@
     "start": "nodemon ./bin/www",
     "tailwind": "npx @tailwindcss/cli -i ./public/stylesheets/input.css -o ./public/stylesheets/style.css --watch"
   },
+  "overrides": {
+    "hbs": {
+      "handlebars": "4.7.10"
+    }
+  },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cookie-parser": "~1.4.4",
@@ -13,6 +18,8 @@
     "express": "^4.22.3",
     "express-fileupload": "^1.5.2",
     "express-handlebars": "^9.0.1",
+    "express-session": "^1.19.0",
+    "handlebars": "^4.7.10",
     "hbs": "^4.3.1",
     "http-errors": "~1.6.3",
     "mongodb": "^7.7.0",

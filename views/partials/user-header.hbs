@@ -25,16 +25,30 @@
           <!-- Account Dropdown -->
         <div class="relative group ml-auto">
             <button class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 ">
-                Account
+                {{#if user}}
+                      {{user.name}}
+                {{else}}{{
+                  Account
+                }}      
+                {{/if}}
                 <span class="text-xs">▼</span>
             </button>
 
             <!-- Dropdown -->
             <div class="absolute right-0 hidden group-hover:block w-32 bg-white shadow-lg rounded">
-                <a href="/login"
+               {{#if user}}
+               <a href="/logout"
+                   class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                    Logout
+                </a>
+               
+                {{else}}
+                  <a href="/login"
                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                     Login
-                </a>
+                </a>   
+                {{/if}}
+                
 
                 <a href="/signup"
                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">

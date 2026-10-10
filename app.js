@@ -4,6 +4,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var {engine} = require("express-handlebars");
+var session = require("express-session");
 
 var userRouter = require("./routes/user");
 var adminRouter = require("./routes/admin");
@@ -11,6 +12,7 @@ var adminRouter = require("./routes/admin");
 var db=require("./config/connection");
 var app = express();
 var fileUpload = require("express-fileupload");
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
@@ -30,7 +32,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(fileUpload());
-console.log("Before database connection");
+app.use(session({
+    secret: "secret-key",
+    resave: false,
+    saveUninitialized: false
+}));console.log("Before database connection");
 
 db.connect((err) => {
     if (err) {
