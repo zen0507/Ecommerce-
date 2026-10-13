@@ -2,7 +2,16 @@ var express = require('express');
 var router = express.Router();
 const productHelpers = require('../helpers/product-helpers');
 const userHelpers = require('../helpers/user-helpers');
-/* GET home page. */
+
+const verifyLogin =(req,res)=>{
+  if(req.session.logginIn){
+    next()
+  }
+  else{
+    res.redirect('/login');
+  }
+}
+
 router.get('/', function(req, res, next) {
     let user = req.session.user;
 
@@ -56,4 +65,10 @@ router.get("/logout",(req,res)=>{
   req.session.destroy();
   res.redirect('/')
 })
+router.get("/cart",verifyLogin,(req,res)=>{
+
+  res.render('user/cart');
+})
+
+
 module.exports = router;
