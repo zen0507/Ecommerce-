@@ -18,7 +18,8 @@ router.get('/login',(req,res)=>{
     res.redirect('/')
   }
   else{
-      res.render('user/login');
+      res.render('user/login',{"loginErr":req.session.loginErr});
+      req.session.loginErr = false;
 
   }
 
@@ -45,6 +46,7 @@ userHelpers.doLogin(req.body).then((response)=>{
 
     }
   else{
+    req.session.loginErr = "Invalid username or password";
     res.redirect('/login');
   }
 })
