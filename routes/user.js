@@ -3,8 +3,8 @@ var router = express.Router();
 const productHelpers = require('../helpers/product-helpers');
 const userHelpers = require('../helpers/user-helpers');
 
-const verifyLogin =(req,res)=>{
-  if(req.session.logginIn){
+const verifyLogin =(req,res,next)=>{
+  if(req.session.loggedIn){
     next()
   }
   else{
