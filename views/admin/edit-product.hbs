@@ -7,7 +7,7 @@
     </h1>
 
     <form
-      action="/admin/add-product"
+      action="/admin/edit-product/{{product._id}}"
       method="POST"
       enctype="multipart/form-data"
     >
@@ -99,7 +99,7 @@
           name="image"
           accept="image/*"
           class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-600"
-          required
+          
         />
       </div>
 
