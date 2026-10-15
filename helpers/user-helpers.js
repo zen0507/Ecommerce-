@@ -3,6 +3,7 @@
         var collections = require('../config/collections')
         const bcrypt = require('bcrypt');
 const { ObjectId } = require('mongodb');
+const { response } = require('express');
         var objectId = require('mongodb').ObjectId
 
         module.exports = {
@@ -41,22 +42,35 @@ const { ObjectId } = require('mongodb');
                     })
             },
 
-            addToCart:(proId,userId)=>{
-                return new Promise(async (resolve,reject)=>{
-                    let userCart = await db.getDb().collection(collections.CART_COLLECTION).findOne({user:new ObjectId(userId)})
-                    if(userCart)
-                    {
+            
+        addToCart: (proId, userId) => {
+            return new Promise(async (resolve, reject) => {
+                let userCart = await db.getDb().collection(collections.CART_COLLECTION)
+                    .findOne({ user: new objectId(userId) });
 
-                    }
-                    else{
-                        let carobj = {
-                            user:new objectId(userId),
-                            products:[new objectId(proId)]
+                if (userCart) {
+                    db.getDb().collection(collections.CART_COLLECTION).updateOne(
+                        { user: new objectId(userId) },
+                        {
+                            $push: {
+                                products: new objectId(proId)
+                            }
                         }
-                        db.getDb().collection(collections.CART_COLLECTION).insertOne(carobj).then((response)=>{
-                            resolve()
-                        })
-                    }
-                })
-            }
+                    ).then((response) => {
+                        resolve();
+                    });
+                } else {
+                    let carobj = {
+                        user: new objectId(userId),
+                        products: [new objectId(proId)]
+                    };
+
+                    db.getDb().collection(collections.CART_COLLECTION).insertOne(carobj)
+                        .then((response) => {
+                            resolve();
+                        });
+                }
+            });
+        }
+
         }
