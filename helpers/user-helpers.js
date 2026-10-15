@@ -71,6 +71,32 @@ const { response } = require('express');
                         });
                 }
             });
+        },
+        getCartProducts:(userId)=>{
+            return new Promise(async ( resolve,reject)=>{
+                let cartItems=await db.getDb().collection(collections.CART_COLLECTION).aggregate([
+                    {                    
+                        $match:{user: new objectId(userId)}
+                    },
+                    {
+                        $lookup:{
+                            from:collections.PRODUCT_COLLECTION,
+                            let:{proList:'$products'},
+                            pipeline:[
+                                {
+                                    $match:{
+                                        $expr:{
+                                            $in:["$_id","$$proList"]
+                                        }
+                                    }
+                                }
+                            ],
+                            as:'cartItems'
+                        }
+                    }               
+                ]).toArray()
+                resolve(cartItems[0].cartItems)
+            })
         }
 
         }
