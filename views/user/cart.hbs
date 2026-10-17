@@ -1,1 +1,88 @@
-<h2>Cart is Empty</h2>
+
+<section class="mx-auto mt-6 w-full max-w-5xl px-4">
+    <div class="overflow-x-auto">
+        <table class="w-full border-collapse text-left text-sm">
+            <thead>
+                <tr class="border-b border-gray-300">
+                    <th class="w-1/4 py-3 font-semibold text-gray-900">
+                        Item
+                    </th>
+                    <th class="w-1/4 py-3 font-semibold text-gray-900">
+                        Title
+                    </th>
+                    <th class="w-1/4 py-3 font-semibold text-gray-900">
+                        Quantity
+                    </th>
+                    <th class="w-1/4 py-3"></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {{#each products}}
+                <tr class="border-b border-gray-200">
+                    <td class="py-3">
+                        <img
+                            src="/product-images/{{this._id}}.jpg"
+                            alt="{{this.name}}"
+                            class="h-12 w-12 object-contain"
+                        >
+                    </td>
+
+                    <td class="py-3 text-gray-800">
+                        {{this.name}}
+                    </td>
+
+                    <td class="py-3">
+                        <div class="flex items-center gap-2">
+                            <button
+                                type="button"
+                                onclick="changeQuantity('{{this._id}}', '{{this.product._id}}', -1)"
+                                class="rounded-sm bg-slate-500 px-2.5 py-1 text-white hover:bg-slate-600"
+                            >
+                                −
+                            </button>
+
+                            <span
+                                id="quantity-{{this.product._id}}"
+                                class="min-w-4 text-center"
+                            >
+                            1                            </span>
+
+                            <button
+                                type="button"
+                                onclick=""
+                                class="rounded-sm bg-slate-500 px-2.5 py-1 text-white hover:bg-slate-600"
+                            >
+                                +
+                            </button>
+                        </div>
+                    </td>
+
+                    <td class="py-3">
+                        <button
+                            type="button"
+                            onclick="removeProduct('{{this._id}}')"
+                            class="rounded bg-red-600 px-3 py-1.5 text-white hover:bg-red-700"
+                        >
+                            Remove
+                        </button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-6 flex justify-end">
+        <a
+            href="/place-order"
+            class="rounded bg-green-600 px-5 py-2 text-white hover:bg-green-700"
+        >
+            Place Order
+        </a>
+    </div>
+</section>
+
+<script>
+   
+</script>
