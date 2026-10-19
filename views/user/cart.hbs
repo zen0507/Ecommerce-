@@ -20,6 +20,7 @@
             <tbody>
                 {{#each products}}
                 <tr class="border-b border-gray-200">
+                    {{#each this.product}}
                     <td class="py-3">
                         <img
                             src="/product-images/{{this._id}}.jpg"
@@ -31,6 +32,7 @@
                     <td class="py-3 text-gray-800">
                         {{this.name}}
                     </td>
+                    {{/each}}
 
                     <td class="py-3">
                         <div class="flex items-center gap-2">
@@ -45,8 +47,7 @@
                             <span
                                 id="quantity-{{this.product._id}}"
                                 class="min-w-4 text-center"
-                            >
-                            1                            </span>
+                            >{{this.quantity}}                           </span>
 
                             <button
                                 type="button"

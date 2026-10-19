@@ -119,25 +119,24 @@ module.exports = {
           {
             $match: { user: new objectId(userId) },
           },
-          {
-            $lookup: {
-              from: collections.PRODUCT_COLLECTION,
-              let: { proList: "$products" },
-              pipeline: [
-                {
-                  $match: {
-                    $expr: {
-                      $in: ["$_id", "$$proList"],
-                    },
-                  },
-                },
-              ],
-              as: "cartItems",
-            },
-          },
+        {
+          $unwind:'$products'
+        },{
+          $project:{
+            item:'$products.item',
+            quantity:'$products.quantity'
+          }
+        },{
+          $lookup:{
+            from:collections.PRODUCT_COLLECTION,
+            localField:'item',
+            foreignField:'_id',
+            as:'product'
+          }
+        }
         ])
         .toArray();
-      resolve(cartItems[0].cartItems);
+      resolve(cartItems);
     });
   },
   getCartCount: (user_id) => {
