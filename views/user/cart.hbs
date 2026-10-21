@@ -20,11 +20,10 @@
             <tbody>
                 {{#each products}}
                 <tr class="border-b border-gray-200">
-                    {{#each this.product}}
                     <td class="py-3">
                         <img
-                            src="/product-images/{{this._id}}.jpg"
-                            alt="{{this.name}}"
+                            src="/product-images/{{this.product._id}}.jpg"
+                            alt="{{this.product.name}}"
                             class="h-12 w-12 object-contain"
                         >
                     </td>
@@ -32,8 +31,7 @@
                     <td class="py-3 text-gray-800">
                         {{this.name}}
                     </td>
-                    {{/each}}
-
+=
                     <td class="py-3">
                         <div class="flex items-center gap-2">
                             <button
@@ -53,6 +51,7 @@
                                 type="button"
                                 onclick=""
                                 class="rounded-sm bg-slate-500 px-2.5 py-1 text-white hover:bg-slate-600"
+                                onclick="changeQuantity('{{this._id}}','{{this.product._id}}',1)"
                             >
                                 +
                             </button>
@@ -85,5 +84,19 @@
 </section>
 
 <script>
-   
+   function changeQuantity(cartId,proId,count)
+   {
+    $.ajax({
+        url:'/change-product-quantity',
+        data:{
+            cart:cartId,
+            product:proId,
+            count:count,
+        },
+        method:'post',
+        success:(response)=>{
+            alert(response)
+        }
+    })
+   }
 </script>
