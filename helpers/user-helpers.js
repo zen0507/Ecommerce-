@@ -171,7 +171,7 @@ module.exports = {
     });
   },
   changeProductQuantity: (details) => {
-    count = pareseInt(details.count)
+    count = parseInt(details.count)
     return new Promise((resolve, reject) => {
       db.getDb().collection(collections.CART_COLLECTION)
         .updateOne(
