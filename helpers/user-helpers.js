@@ -190,4 +190,25 @@ module.exports = {
         });
     });
   },
+  removeCartProduct:(details) =>{
+    return new Promise((resolve,response)=>{
+       db.getDb().collection(collections.CART_COLLECTION)
+        .updateOne(
+          {
+            _id: new objectId(details.cart),
+          },
+          {
+            $pull: {
+              products: {
+                item: new ObjectId(details.product)
+              }
+            },
+          },
+        )
+        .then((response) => {
+          resolve(response);
+        });
+    })
+  }
 };
+ 

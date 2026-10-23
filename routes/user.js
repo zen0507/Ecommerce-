@@ -82,4 +82,9 @@ router.post("/change-product-quantity", (req, res, next) => {
       res.json({ status: true });
   });
 });
+router.post("/remove-cart-product", (req, res, next) => {
+  userHelpers.removeCartProduct(req.body).then(() => {
+      res.json({ status: true });
+  });
+});
 module.exports = router;

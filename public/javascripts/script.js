@@ -37,3 +37,21 @@ function addToCart(proId)
         }
     })
    }
+
+   function removeProduct(cartId,proId)
+   {
+    $.ajax({
+      url: '/remove-cart-product',
+       data:{
+            cart:cartId,
+            product:proId,
+        },
+        method:'post',
+        success:(response)=>{
+        if (response.status) {
+          location.reload();
+
+      }
+        }
+    })
+   }
