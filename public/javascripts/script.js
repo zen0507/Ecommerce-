@@ -28,11 +28,12 @@ function addToCart(proId)
         method:'post',
         success:(response)=>{
         if (response.status) {
-              let cartCount = parseInt($("#cart-count").html());
-
-              cartCount = cartCount + count;
-
-              $("#cart-count").html(cartCount);
+          let quantityElement = $("#quantity-" + proId);
+          let currentQuantity = parseInt(quantityElement.text());
+          quantityElement.text(currentQuantity + count);
+          let cartCount = parseInt($("#cart-count").html());
+          cartCount = cartCount + count;
+          $("#cart-count").html(cartCount);
       }
         }
     })
