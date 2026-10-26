@@ -171,28 +171,58 @@ module.exports = {
     });
   },
   changeProductQuantity: (details) => {
-    count = parseInt(details.count)
     return new Promise((resolve, reject) => {
-      db.getDb().collection(collections.CART_COLLECTION)
-        .updateOne(
-          {
-            _id: new objectId(details.cart),
-            "products.item": new objectId(details.product),
-          },
-          {
-            $inc: {
-              "products.$.quantity": count,
+      const count = parseInt(details.count);
+      const quantity = parseInt(details.quantity);
+
+      if (count === -1 && quantity === 1) {
+        db.getDb()
+          .collection(collections.CART_COLLECTION)
+          .updateOne(
+            {
+              _id: new ObjectId(details.cart),
             },
-          },
-        )
-        .then(() => {
-          resolve();
-        });
+            {
+              $pull: {
+                products: {
+                  item: new ObjectId(details.product),
+                },
+              },
+            },
+          )
+          .then(() => {
+            resolve({ removeProduct: true });
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      } else {
+        db.getDb()
+          .collection(collections.CART_COLLECTION)
+          .updateOne(
+            {
+              _id: new ObjectId(details.cart),
+              "products.item": new ObjectId(details.product),
+            },
+            {
+              $inc: {
+                "products.$.quantity": count,
+              },
+            },
+          )
+          .then(() => {
+            resolve({ removeProduct: false });
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      }
     });
   },
-  removeCartProduct:(details) =>{
-    return new Promise((resolve,response)=>{
-       db.getDb().collection(collections.CART_COLLECTION)
+  removeCartProduct: (details) => {
+    return new Promise((resolve, response) => {
+      db.getDb()
+        .collection(collections.CART_COLLECTION)
         .updateOne(
           {
             _id: new objectId(details.cart),
@@ -200,15 +230,14 @@ module.exports = {
           {
             $pull: {
               products: {
-                item: new ObjectId(details.product)
-              }
+                item: new ObjectId(details.product),
+              },
             },
           },
         )
         .then((response) => {
           resolve(response);
         });
-    })
-  }
+    });
+  },
 };
- 
