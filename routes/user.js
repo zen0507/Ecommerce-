@@ -63,10 +63,11 @@ router.get("/logout", (req, res) => {
 router.get("/cart", verifyLogin, async (req, res) => {
   let products = await userHelpers.getCartProducts(req.session.user._id);
 
-  cartCount = await userHelpers.getCartCount(req.session.user._id);
+  let cartCount = await userHelpers.getCartCount(req.session.user._id);
   
+  let total = await userHelpers.getCartTotal(req.session.user._id);
 
-  res.render("user/cart", { products, user: req.session.user,cartCount });
+  res.render("user/cart", { products, user: req.session.user,cartCount ,total });
 
 
 });
@@ -77,14 +78,33 @@ router.get("/add-to-cart/:id", (req, res) => {
   });
 });
 
-router.post("/change-product-quantity", (req, res, next) => {
-  userHelpers.changeProductQuantity(req.body).then((response) => {
-      res.json(response);
-  });
+router.post("/change-product-quantity", async (req, res, next) => {
+  try {
+        let response = await userHelpers.changeProductQuantity(req.body);
+
+        let total = await userHelpers.getCartTotal(req.session.user._id);
+
+        response.total = total;
+
+        res.json(response);
+
+    } catch (error) {
+        next(error);
+    }
 });
-router.post("/remove-cart-product", (req, res, next) => {
-  userHelpers.removeCartProduct(req.body).then(() => {
-      res.json({ status: true });
-  });
+router.post("/remove-cart-product", async (req, res, next) => {
+    try {
+        await userHelpers.removeCartProduct(req.body);
+
+        let total = await userHelpers.getCartTotal(req.session.user._id);
+
+        res.json({
+            status: true,
+            total: total
+        });
+
+    } catch (error) {
+        next(error);
+    }
 });
 module.exports = router;

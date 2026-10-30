@@ -38,6 +38,8 @@ function changeQuantity(cartId, proId, count) {
 
         let cartCount = parseInt($("#cart-count").text());
         $("#cart-count").text(cartCount + count);
+        $("#cart-total").text(response.total);
+
       }
     },
   });
@@ -53,6 +55,8 @@ function removeProduct(cartId, proId) {
     method: "post",
     success: (response) => {
       if (response.status) {
+          $("#cart-total").text(response.total);
+
         location.reload();
       }
     },

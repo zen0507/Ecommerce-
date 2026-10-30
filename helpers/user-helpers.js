@@ -240,4 +240,52 @@ module.exports = {
         });
     });
   },
+  getCartTotal: (userId) => {
+     return new Promise(async (resolve, reject) => {
+        try {
+            let total = await db.getDb()
+                .collection(collections.CART_COLLECTION)
+                .aggregate([
+                    {
+                        $match: {
+                            user: new ObjectId(userId)
+                        }
+                    },
+                    {
+                        $unwind: "$products"
+                    },
+                    {
+                        $lookup: {
+                            from: collections.PRODUCT_COLLECTION,
+                            localField: "products.item",
+                            foreignField: "_id",
+                            as: "productDetails"
+                        }
+                    },
+                    {
+                        $unwind: "$productDetails"
+                    },
+                    {
+                        $group: {
+                            _id: null,
+                            total: {
+                                $sum: {
+                                    $multiply: [
+                                          { $toInt: "$products.quantity" },
+                                          { $toDouble: "$productDetails.price" }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                ]).toArray();
+
+            resolve(total.length > 0 ? total[0].total : 0);
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+
+  },
 };
