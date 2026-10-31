@@ -3,6 +3,7 @@ var collections = require("../config/collections");
 const bcrypt = require("bcrypt");
 const { ObjectId } = require("mongodb");
 const { response } = require("express");
+const { log } = require("handlebars");
 var objectId = require("mongodb").ObjectId;
 
 module.exports = {
@@ -241,51 +242,84 @@ module.exports = {
     });
   },
   getCartTotal: (userId) => {
-     return new Promise(async (resolve, reject) => {
-        try {
-            let total = await db.getDb()
-                .collection(collections.CART_COLLECTION)
-                .aggregate([
-                    {
-                        $match: {
-                            user: new ObjectId(userId)
-                        }
-                    },
-                    {
-                        $unwind: "$products"
-                    },
-                    {
-                        $lookup: {
-                            from: collections.PRODUCT_COLLECTION,
-                            localField: "products.item",
-                            foreignField: "_id",
-                            as: "productDetails"
-                        }
-                    },
-                    {
-                        $unwind: "$productDetails"
-                    },
-                    {
-                        $group: {
-                            _id: null,
-                            total: {
-                                $sum: {
-                                    $multiply: [
-                                          { $toInt: "$products.quantity" },
-                                          { $toDouble: "$productDetails.price" }
-                                    ]
-                                }
-                            }
-                        }
-                    }
-                ]).toArray();
+    return new Promise(async (resolve, reject) => {
+      try {
+        let total = await db
+          .getDb()
+          .collection(collections.CART_COLLECTION)
+          .aggregate([
+            {
+              $match: {
+                user: new ObjectId(userId),
+              },
+            },
+            {
+              $unwind: "$products",
+            },
+            {
+              $lookup: {
+                from: collections.PRODUCT_COLLECTION,
+                localField: "products.item",
+                foreignField: "_id",
+                as: "productDetails",
+              },
+            },
+            {
+              $unwind: "$productDetails",
+            },
+            {
+              $group: {
+                _id: null,
+                total: {
+                  $sum: {
+                    $multiply: [
+                      { $toInt: "$products.quantity" },
+                      { $toDouble: "$productDetails.price" },
+                    ],
+                  },
+                },
+              },
+            },
+          ])
+          .toArray();
 
-            resolve(total.length > 0 ? total[0].total : 0);
+        resolve(total.length > 0 ? total[0].total : 0);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  },
+  placeOrder: (order,products,total) => {
+    return new Promise((resolve,response)=>{
+      let status = order.paymentMethod==='COD'?'placed':'pending';
+      let orderObj ={
+        deliveryDetails:{
+          mobile:order.mobile,
+          address:order.address,
+          pincode:order.pincode
 
-        } catch (error) {
-            reject(error);
-        }
+        },
+        userId:new objectId(order.userId),
+        paymentMethod:order.paymentMethod,
+        products:products,
+        status:status,
+        totalAmount:total,
+        date:new Date()
+      }
+      db.getDb().collection(collections.ORDER_COLLECTION).insertOne(orderObj).then((response)=>{
+        db.getDb().collection(collections.CART_COLLECTION).deleteOne({user:new objectId(order.userId)})
+      })
+
+    })
+  },
+  getCartProductList: async (userId) => {
+  let cart = await db
+    .getDb()
+    .collection(collections.CART_COLLECTION)
+    .findOne({
+      user: new objectId(userId),
     });
 
-  },
+  return cart.products;
+},
 };

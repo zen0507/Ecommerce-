@@ -110,7 +110,15 @@ router.post("/remove-cart-product", async (req, res, next) => {
 router.get("/place-order",verifyLogin, async(req, res) => {
   let total = await userHelpers.getCartTotal(req.session.user._id);
 
-  res.render("user/place-order",{total});
+  res.render("user/place-order",{total,user:req.session.user});
 });
+
+router.post('/place-order',async (req,res)=>{
+  let products = await userHelpers.getCartProductList(req.body.userId);
+  let total = await userHelpers.getCartTotal(req.body.userId);
+  userHelpers.placeOrder(req.body,products,total).then((response)=>{
+    res.json({status:true})
+  })
+})
 
 module.exports = router;

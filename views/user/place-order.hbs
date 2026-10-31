@@ -12,7 +12,7 @@
         </p>
       {{/if}}
 
-      <form action="/place-order" method="POST" class="mt-8 space-y-6">
+      <form action="/place-order" method="POST" class="mt-8 space-y-6" id="checkout-form">
         <div>
           <label for="address" class="mb-2 block text-sm font-medium">Address</label>
           <textarea
@@ -83,6 +83,7 @@
               />
               <span class="text-sm font-medium">Online payment</span>
             </label>
+            <input type="text" name="userId" id="" value="{{user._id}}" hidden>
           </div>
         </fieldset>
 
@@ -109,3 +110,20 @@
     </aside>
   </div>
 </section>
+<script>
+  $("#checkout-form").submit((e)=>{
+    e.preventDefault()
+    $.ajax({
+      url:"/place-order",
+      method:"post",
+      data:$('#checkout-form').serialize(),
+      success:(response)=>{
+        alert(response)
+        if(response.status)
+        {
+          location.href=""
+        }
+      }
+      })
+  })
+</script>
