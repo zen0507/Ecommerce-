@@ -75,16 +75,18 @@
       </tbody>
     </table>
   </div>
+  
   <div class="flex flex-col items-end mt-4 gap-4">
     <h5 class="text-lg font-medium">
       TOTAL: <span id="cart-total"> {{total}}</span>$
     </h5>
 
-    <button
-      class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded w-36"
-    >
-      Place Order
-    </button>
+
+  <a
+  href="/place-order"
+  class="inline-block w-36 rounded bg-green-600 px-6 py-2 text-center font-semibold text-white hover:bg-green-700">
+  Place Order
+</a>
   </div>
 
 </section>

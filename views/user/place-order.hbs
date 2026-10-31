@@ -1,0 +1,111 @@
+<section class="min-h-screen bg-slate-50 px-4 py-10 text-slate-900">
+  <div class="mx-auto grid max-w-5xl overflow-hidden rounded-2xl bg-white shadow-lg md:grid-cols-2">
+    <div class="p-6 sm:p-10">
+      <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-indigo-600">
+        Checkout
+      </p>
+      <h1 class="text-3xl font-bold">Enter Delivery Details</h1>
+
+      {{#if error}}
+        <p class="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-700" role="alert">
+          {{error}}
+        </p>
+      {{/if}}
+
+      <form action="/place-order" method="POST" class="mt-8 space-y-6">
+        <div>
+          <label for="address" class="mb-2 block text-sm font-medium">Address</label>
+          <textarea
+            id="address"
+            name="address"
+            rows="3"
+            required
+            autocomplete="street-address"
+            placeholder="House/flat, street, area"
+            class="w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+          ></textarea>
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label for="pincode" class="mb-2 block text-sm font-medium">Pincode</label>
+            <input
+              id="pincode"
+              name="pincode"
+              type="text"
+              inputmode="numeric"
+              autocomplete="postal-code"
+              pattern="[0-9]{6}"
+              maxlength="6"
+              required
+              value=""
+              placeholder="6-digit pincode"
+              class="w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            />
+          </div>
+
+          <div>
+            <label for="mobile" class="mb-2 block text-sm font-medium">Mobile</label>
+            <input
+              id="mobile"
+              name="mobile"
+              type="tel"
+              autocomplete="tel"
+              required
+              value=""
+              placeholder="Your mobile number"
+              class="w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            />
+          </div>
+        </div>
+
+        <fieldset>
+          <legend class="mb-3 text-sm font-medium">Payment method</legend>
+          <div class="space-y-3">
+            <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-slate-200 p-4">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="COD"
+                required
+                checked
+                class="h-4 w-4 accent-indigo-600"
+              />
+              <span class="text-sm font-medium">COD (Cash on Delivery)</span>
+            </label>
+
+            <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-slate-200 p-4">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="Online"
+                class="h-4 w-4 accent-indigo-600"
+              />
+              <span class="text-sm font-medium">Online payment</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <button
+          type="submit"
+          class="w-full rounded-lg bg-indigo-600 px-5 py-3 font-semibold text-white transition hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-200"
+        >
+          Checkout
+        </button>
+      </form>
+    </div>
+
+    <aside class="border-t border-slate-200 bg-slate-50 p-6 sm:p-10 md:border-l md:border-t-0">
+      <h2 class="text-lg font-semibold">Order summary</h2>
+
+      
+
+      <div class="mt-6 border-t border-slate-200 pt-4">
+        <p class="flex justify-between gap-4 font-semibold">
+          <span>Total Amount</span>
+          <span>{{total}} $</span>
+        </p>
+      </div>
+    </aside>
+  </div>
+</section>

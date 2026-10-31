@@ -107,4 +107,10 @@ router.post("/remove-cart-product", async (req, res, next) => {
         next(error);
     }
 });
+router.get("/place-order",verifyLogin, async(req, res) => {
+  let total = await userHelpers.getCartTotal(req.session.user._id);
+
+  res.render("user/place-order",{total});
+});
+
 module.exports = router;
