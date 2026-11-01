@@ -1,0 +1,194 @@
+<section class="max-w-6xl mx-auto px-4 py-10">
+
+    <!-- Heading -->
+    <div class="mb-8">
+
+        <a href="/orders"
+            class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm mb-5">
+
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 19l-7-7 7-7">
+                </path>
+            </svg>
+
+            Back to Orders
+        </a>
+
+        <h1 class="text-3xl font-bold text-gray-900">
+            Order Details
+        </h1>
+
+        <p class="text-gray-500 mt-2">
+            Products included in your order.
+        </p>
+
+    </div>
+
+    <!-- Order Information -->
+    <div class="bg-white border border-gray-200 rounded-xl p-5 mb-6 shadow-sm">
+
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+
+            <div>
+                <p class="text-xs uppercase text-gray-500 font-semibold">
+                    Order ID
+                </p>
+
+                <p class="text-gray-800 font-semibold mt-1 break-all">
+                    {{order._id}}
+                </p>
+            </div>
+
+            <span class="inline-block w-fit px-4 py-2 rounded-full bg-green-100 text-green-700 text-sm font-semibold capitalize">
+                {{order.status}}
+            </span>
+
+        </div>
+
+    </div>
+
+    <!-- Products -->
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+
+        <div class="px-6 py-5 border-b border-gray-200">
+            <h2 class="text-xl font-bold text-gray-900">
+                Ordered Products
+            </h2>
+        </div>
+
+        <div class="divide-y divide-gray-100">
+
+            {{#each order.products}}
+
+            <div class="p-6 flex flex-col sm:flex-row sm:items-center gap-5">
+
+                <!-- Product Image -->
+                <div class="w-24 h-24 bg-gray-100 rounded-xl flex items-center justify-center shrink-0 overflow-hidden">
+
+                    {{#if this.item.image}}
+                    <img src="{{this.item.image}}"
+                        alt="{{this.item.name}}"
+                        class="w-full h-full object-contain">
+                    {{else}}
+                    <span class="text-3xl">📱</span>
+                    {{/if}}
+
+                </div>
+
+                <!-- Product Information -->
+                <div class="flex-1">
+
+                    <h3 class="text-lg font-bold text-gray-900">
+                        {{this.item.name}}
+                    </h3>
+
+                    <p class="text-sm text-gray-500 mt-1">
+                        {{this.item.category}}
+                    </p>
+
+                    <p class="text-sm text-gray-500 mt-2">
+                        {{this.item.description}}
+                    </p>
+
+                </div>
+
+                <!-- Price -->
+                <div class="sm:text-center">
+
+                    <p class="text-xs text-gray-500 uppercase font-semibold">
+                        Price
+                    </p>
+
+                    <p class="font-semibold text-gray-800 mt-2">
+                        ₹{{this.item.price}}
+                    </p>
+
+                </div>
+
+                <!-- Quantity -->
+                <div class="sm:text-center sm:w-24">
+
+                    <p class="text-xs text-gray-500 uppercase font-semibold">
+                        Quantity
+                    </p>
+
+                    <p class="font-semibold text-gray-800 mt-2">
+                        {{this.quantity}}
+                    </p>
+
+                </div>
+
+            </div>
+
+            {{/each}}
+
+        </div>
+
+        <!-- Total Amount -->
+        <div class="bg-gray-50 border-t border-gray-200 px-6 py-6">
+
+            <div class="flex justify-between items-center max-w-sm ml-auto">
+
+                <span class="text-gray-600 font-semibold">
+                    Total Amount
+                </span>
+
+                <span class="text-2xl font-bold text-gray-900">
+                    ₹{{order.totalAmount}}
+                </span>
+
+            </div>
+
+            <p class="text-xs text-gray-500 text-right mt-2">
+                Payment Method: {{order.paymentMethod}}
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- Delivery Information -->
+    <div class="mt-6 bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+
+        <h2 class="text-lg font-bold text-gray-900 mb-5">
+            Delivery Information
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+
+            <div>
+                <p class="text-xs text-gray-500 uppercase font-semibold">
+                    Address
+                </p>
+
+                <p class="text-gray-800 mt-2">
+                    {{order.deliveryDetails.address}}
+                </p>
+            </div>
+
+            <div>
+                <p class="text-xs text-gray-500 uppercase font-semibold">
+                    Pincode
+                </p>
+
+                <p class="text-gray-800 mt-2">
+                    {{order.deliveryDetails.pincode}}
+                </p>
+            </div>
+
+            <div>
+                <p class="text-xs text-gray-500 uppercase font-semibold">
+                    Mobile
+                </p>
+
+                <p class="text-gray-800 mt-2">
+                    {{order.deliveryDetails.mobile}}
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

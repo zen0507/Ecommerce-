@@ -1,0 +1,156 @@
+<section class="max-w-7xl mx-auto px-4 py-10">
+
+    <!-- Page Heading -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">
+            My Orders
+        </h1>
+
+        <p class="text-gray-500 mt-2">
+            View and manage all your previous orders.
+        </p>
+    </div>
+
+    {{#if orders}}
+
+    <div class="space-y-5">
+
+        {{#each orders}}
+
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+
+            <!-- Order Header -->
+            <div class="bg-gray-50 px-6 py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 border-b">
+
+                <div>
+                    <p class="text-xs text-gray-500 uppercase font-semibold tracking-wide">
+                        Order Date
+                    </p>
+
+                    <p class="text-gray-800 font-medium mt-1">
+                        {{this.date}}
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-3">
+
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 capitalize">
+                        {{this.status}}
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- Order Details -->
+            <div class="p-6">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                    <!-- Delivery Address -->
+                    <div>
+                        <p class="text-xs text-gray-500 font-semibold uppercase">
+                            Delivery Address
+                        </p>
+
+                        <p class="mt-2 text-gray-800 font-medium">
+                            {{this.deliveryDetails.address}}
+                        </p>
+                    </div>
+
+                    <!-- Pincode -->
+                    <div>
+                        <p class="text-xs text-gray-500 font-semibold uppercase">
+                            Pincode
+                        </p>
+
+                        <p class="mt-2 text-gray-800 font-medium">
+                            {{this.deliveryDetails.pincode}}
+                        </p>
+                    </div>
+
+                    <!-- Mobile -->
+                    <div>
+                        <p class="text-xs text-gray-500 font-semibold uppercase">
+                            Mobile Number
+                        </p>
+
+                        <p class="mt-2 text-gray-800 font-medium">
+                            {{this.deliveryDetails.mobile}}
+                        </p>
+                    </div>
+
+                    <!-- Payment -->
+                    <div>
+                        <p class="text-xs text-gray-500 font-semibold uppercase">
+                            Payment Method
+                        </p>
+
+                        <p class="mt-2 text-gray-800 font-medium">
+                            {{this.paymentMethod}}
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Bottom Section -->
+                <div class="mt-6 pt-5 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+
+                    <div>
+                        <p class="text-sm text-gray-500">
+                            Total Amount
+                        </p>
+
+                        <h2 class="text-2xl font-bold text-gray-900 mt-1">
+                            ₹{{this.totalAmount}}
+                        </h2>
+                    </div>
+
+                    <a href="/view-order-products/{{this._id}}"
+                        class="inline-flex justify-center items-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition">
+
+                        View Products
+
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5l7 7-7 7">
+                            </path>
+                        </svg>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {{/each}}
+
+    </div>
+
+    {{else}}
+
+    <!-- Empty Orders -->
+    <div class="bg-white border border-gray-200 rounded-xl p-12 text-center">
+
+        <div class="text-5xl mb-4">📦</div>
+
+        <h2 class="text-xl font-bold text-gray-800">
+            No Orders Found
+        </h2>
+
+        <p class="text-gray-500 mt-2">
+            You haven't placed any orders yet.
+        </p>
+
+        <a href="/"
+            class="inline-block mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition">
+            Start Shopping
+        </a>
+
+    </div>
+
+    {{/if}}
+
+</section>
