@@ -4,7 +4,13 @@ const bcrypt = require("bcrypt");
 const { ObjectId } = require("mongodb");
 const { response } = require("express");
 const { log } = require("handlebars");
+const env = require("dotenv").config();
 var objectId = require("mongodb").ObjectId;
+const Razorpay = require("razorpay");
+var instance = new Razorpay({
+  key_id: process.env.key_id,
+  key_secret: process.env.key_secret,
+});
 
 module.exports = {
   doSignup: (userData) => {
@@ -317,24 +323,28 @@ module.exports = {
     return result.insertedId;
   },
   getCartProductList: async (userId) => {
-  let cart = await db
-    .getDb()
-    .collection(collections.CART_COLLECTION)
-    .findOne({
-      user: new objectId(userId),
-    });
+    let cart = await db
+      .getDb()
+      .collection(collections.CART_COLLECTION)
+      .findOne({
+        user: new objectId(userId),
+      });
 
-  return cart.products;
-},
-getUserOrders:(userId)=>{
-  return new Promise(async(resolve,reject)=>{
-    let orders = await db.getDb().collection(collections.ORDER_COLLECTION).find({userId:new objectId(userId)}).toArray();
-    resolve(orders)
-  })
-},
-getOrderProducts:(orderId)=>{
-  return new Promise(async(resolve,reject)=>{
-    let orderProduct = await db
+    return cart.products;
+  },
+  getUserOrders: (userId) => {
+    return new Promise(async (resolve, reject) => {
+      let orders = await db
+        .getDb()
+        .collection(collections.ORDER_COLLECTION)
+        .find({ userId: new objectId(userId) })
+        .toArray();
+      resolve(orders);
+    });
+  },
+  getOrderProducts: (orderId) => {
+    return new Promise(async (resolve, reject) => {
+      let orderProduct = await db
         .getDb()
         .collection(collections.ORDER_COLLECTION)
         .aggregate([
@@ -365,14 +375,40 @@ getOrderProducts:(orderId)=>{
               product: { $arrayElemAt: ["$product", 0] },
             },
           },
-        ]).toArray();
-        resolve(orderProduct);
-  })
-},
-getSingleOrder:(orderId)=>{
-  return new Promise(async(resolve,reject)=>{
-    let orders = await db.getDb().collection(collections.ORDER_COLLECTION).findOne({_id:new objectId(orderId)});
-    resolve(orders)
-  })
-}
+        ])
+        .toArray();
+      resolve(orderProduct);
+    });
+  },
+  getSingleOrder: (orderId) => {
+    return new Promise(async (resolve, reject) => {
+      let orders = await db
+        .getDb()
+        .collection(collections.ORDER_COLLECTION)
+        .findOne({ _id: new objectId(orderId) });
+      resolve(orders);
+    });
+  },
+  generateRazorpay: (orderId, total) => {
+    return new Promise((resolve, reject) => {
+      var options = {
+        amount: total * 100, // Razorpay expects amount in paise
+        currency: "INR",
+        receipt: orderId,
+        notes: {
+          key1: "value3",
+          key2: "value2",
+        },
+      };
+      instance.orders.create(options, function (err, order) {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          console.log("New Order:", order);
+          resolve(order);
+        }
+      });
+    });
+  },
 };
