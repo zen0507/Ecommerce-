@@ -289,28 +289,32 @@ module.exports = {
       }
     });
   },
-  placeOrder: (order,products,total) => {
-    return new Promise((resolve,response)=>{
-      let status = order.paymentMethod==='COD'?'placed':'pending';
-      let orderObj ={
-        deliveryDetails:{
-          mobile:order.mobile,
-          address:order.address,
-          pincode:order.pincode
+  placeOrder: async (order, products, total) => {
+    let status = order.paymentMethod === "COD" ? "placed" : "pending";
+    let orderObj = {
+      deliveryDetails: {
+        mobile: order.mobile,
+        address: order.address,
+        pincode: order.pincode,
+      },
+      userId: new objectId(order.userId),
+      paymentMethod: order.paymentMethod,
+      products: products,
+      status: status,
+      totalAmount: total,
+      date: new Date(),
+    };
 
-        },
-        userId:new objectId(order.userId),
-        paymentMethod:order.paymentMethod,
-        products:products,
-        status:status,
-        totalAmount:total,
-        date:new Date()
-      }
-      db.getDb().collection(collections.ORDER_COLLECTION).insertOne(orderObj).then((response)=>{
-        db.getDb().collection(collections.CART_COLLECTION).deleteOne({user:new objectId(order.userId)})
-      })
+    let result = await db
+      .getDb()
+      .collection(collections.ORDER_COLLECTION)
+      .insertOne(orderObj);
+    await db
+      .getDb()
+      .collection(collections.CART_COLLECTION)
+      .deleteOne({ user: new objectId(order.userId) });
 
-    })
+    return result.insertedId;
   },
   getCartProductList: async (userId) => {
   let cart = await db
@@ -322,4 +326,10 @@ module.exports = {
 
   return cart.products;
 },
+getUserOrders:(userId)=>{
+  return new Promise(async(resolve,reject)=>{
+    let orders = await db.getDb().collection(collections.ORDER_COLLECTION).find({userId:new objectId(userId)}).toArray();
+    resolve(orders)
+  })
+}
 };

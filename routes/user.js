@@ -64,12 +64,15 @@ router.get("/cart", verifyLogin, async (req, res) => {
   let products = await userHelpers.getCartProducts(req.session.user._id);
 
   let cartCount = await userHelpers.getCartCount(req.session.user._id);
-  
+
   let total = await userHelpers.getCartTotal(req.session.user._id);
 
-  res.render("user/cart", { products, user: req.session.user,cartCount ,total });
-
-
+  res.render("user/cart", {
+    products,
+    user: req.session.user,
+    cartCount,
+    total,
+  });
 });
 
 router.get("/add-to-cart/:id", (req, res) => {
@@ -80,45 +83,65 @@ router.get("/add-to-cart/:id", (req, res) => {
 
 router.post("/change-product-quantity", async (req, res, next) => {
   try {
-        let response = await userHelpers.changeProductQuantity(req.body);
+    let response = await userHelpers.changeProductQuantity(req.body);
 
-        let total = await userHelpers.getCartTotal(req.session.user._id);
+    let total = await userHelpers.getCartTotal(req.session.user._id);
 
-        response.total = total;
+    response.total = total;
 
-        res.json(response);
-
-    } catch (error) {
-        next(error);
-    }
+    res.json(response);
+  } catch (error) {
+    next(error);
+  }
 });
 router.post("/remove-cart-product", async (req, res, next) => {
-    try {
-        await userHelpers.removeCartProduct(req.body);
+  try {
+    await userHelpers.removeCartProduct(req.body);
 
-        let total = await userHelpers.getCartTotal(req.session.user._id);
+    let total = await userHelpers.getCartTotal(req.session.user._id);
 
-        res.json({
-            status: true,
-            total: total
-        });
-
-    } catch (error) {
-        next(error);
-    }
+    res.json({
+      status: true,
+      total: total,
+    });
+  } catch (error) {
+    next(error);
+  }
 });
-router.get("/place-order",verifyLogin, async(req, res) => {
+router.get("/place-order", verifyLogin, async (req, res) => {
   let total = await userHelpers.getCartTotal(req.session.user._id);
 
-  res.render("user/place-order",{total,user:req.session.user});
+  res.render("user/place-order", { total, user: req.session.user });
 });
 
-router.post('/place-order',async (req,res)=>{
-  let products = await userHelpers.getCartProductList(req.body.userId);
-  let total = await userHelpers.getCartTotal(req.body.userId);
-  userHelpers.placeOrder(req.body,products,total).then((response)=>{
-    res.json({status:true})
-  })
-})
+router.post("/place-order", verifyLogin, async (req, res, next) => {
+  try {
+    let userId = req.session.user._id;
+    let products = await userHelpers.getCartProductList(userId);
+    let total = await userHelpers.getCartTotal(userId);
+    let orderId = await userHelpers.placeOrder(
+      { ...req.body, userId },
+      products,
+      total,
+    );
 
+    res.json({
+      status: true,
+      orderId: orderId.toString(),
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+router.get("/order-success/:orderId", verifyLogin, (req, res) => {
+  res.render("user/order-success", {
+    orderId: req.params.orderId,
+    user: req.session.user,
+  });
+});
+router.get("/orders", verifyLogin, async (req, res) => {
+  let orders = await userHelpers.getUserOrders(req.session.user._id);
+  console.log(orders);
+  res.render("user/orders", { user: req.session.user, orders });
+});
 module.exports = router;

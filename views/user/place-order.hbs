@@ -83,9 +83,10 @@
               />
               <span class="text-sm font-medium">Online payment</span>
             </label>
-            <input type="text" name="userId" id="" value="{{user._id}}" hidden>
           </div>
         </fieldset>
+
+        <p id="checkout-error" class="hidden text-sm text-red-700" role="alert"></p>
 
         <button
           type="submit"
@@ -118,11 +119,15 @@
       method:"post",
       data:$('#checkout-form').serialize(),
       success:(response)=>{
-        alert(response)
         if(response.status)
         {
-          location.href=""
+          location.href="/order-success/"+response.orderId;
         }
+      },
+      error:()=>{
+        $("#checkout-error")
+          .text("Unable to place your order. Please try again.")
+          .removeClass("hidden");
       }
       })
   })
