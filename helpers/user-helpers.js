@@ -331,5 +331,48 @@ getUserOrders:(userId)=>{
     let orders = await db.getDb().collection(collections.ORDER_COLLECTION).find({userId:new objectId(userId)}).toArray();
     resolve(orders)
   })
+},
+getOrderProducts:(orderId)=>{
+  return new Promise(async(resolve,reject)=>{
+    let orderProduct = await db
+        .getDb()
+        .collection(collections.ORDER_COLLECTION)
+        .aggregate([
+          {
+            $match: { _id: new objectId(orderId) },
+          },
+          {
+            $unwind: "$products",
+          },
+          {
+            $project: {
+              item: "$products.item",
+              quantity: "$products.quantity",
+            },
+          },
+          {
+            $lookup: {
+              from: collections.PRODUCT_COLLECTION,
+              localField: "item",
+              foreignField: "_id",
+              as: "product",
+            },
+          },
+          {
+            $project: {
+              item: 1,
+              quantity: 1,
+              product: { $arrayElemAt: ["$product", 0] },
+            },
+          },
+        ]).toArray();
+        resolve(orderProduct);
+  })
+},
+getSingleOrder:(orderId)=>{
+  return new Promise(async(resolve,reject)=>{
+    let orders = await db.getDb().collection(collections.ORDER_COLLECTION).findOne({_id:new objectId(orderId)});
+    resolve(orders)
+  })
 }
 };

@@ -144,4 +144,12 @@ router.get("/orders", verifyLogin, async (req, res) => {
   console.log(orders);
   res.render("user/orders", { user: req.session.user, orders });
 });
+router.get("/view-order-products/:orderId",verifyLogin,async(req,res)=>{
+  let products = await userHelpers.getOrderProducts(req.params.orderId);
+  let order = await userHelpers.getSingleOrder(req.params.orderId);
+
+  console.log(products);
+  console.log(order);
+  res.render("user/order-products.hbs",{products,order});
+})
 module.exports = router;
