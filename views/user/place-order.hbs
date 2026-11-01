@@ -1,20 +1,35 @@
 <section class="min-h-screen bg-slate-50 px-4 py-10 text-slate-900">
-  <div class="mx-auto grid max-w-5xl overflow-hidden rounded-2xl bg-white shadow-lg md:grid-cols-2">
+  <div
+    class="mx-auto grid max-w-5xl overflow-hidden rounded-2xl bg-white shadow-lg md:grid-cols-2"
+  >
     <div class="p-6 sm:p-10">
-      <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-indigo-600">
+      <p
+        class="mb-2 text-sm font-semibold uppercase tracking-wide text-indigo-600"
+      >
         Checkout
       </p>
       <h1 class="text-3xl font-bold">Enter Delivery Details</h1>
 
       {{#if error}}
-        <p class="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-700" role="alert">
+        <p
+          class="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-700"
+          role="alert"
+        >
           {{error}}
         </p>
       {{/if}}
 
-      <form action="/place-order" method="POST" class="mt-8 space-y-6" id="checkout-form">
+      <form
+        action="/place-order"
+        method="POST"
+        class="mt-8 space-y-6"
+        id="checkout-form"
+      >
         <div>
-          <label for="address" class="mb-2 block text-sm font-medium">Address</label>
+          <label
+            for="address"
+            class="mb-2 block text-sm font-medium"
+          >Address</label>
           <textarea
             id="address"
             name="address"
@@ -28,7 +43,10 @@
 
         <div class="grid gap-5 sm:grid-cols-2">
           <div>
-            <label for="pincode" class="mb-2 block text-sm font-medium">Pincode</label>
+            <label
+              for="pincode"
+              class="mb-2 block text-sm font-medium"
+            >Pincode</label>
             <input
               id="pincode"
               name="pincode"
@@ -45,7 +63,10 @@
           </div>
 
           <div>
-            <label for="mobile" class="mb-2 block text-sm font-medium">Mobile</label>
+            <label
+              for="mobile"
+              class="mb-2 block text-sm font-medium"
+            >Mobile</label>
             <input
               id="mobile"
               name="mobile"
@@ -62,7 +83,9 @@
         <fieldset>
           <legend class="mb-3 text-sm font-medium">Payment method</legend>
           <div class="space-y-3">
-            <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-slate-200 p-4">
+            <label
+              class="flex cursor-pointer items-center gap-3 rounded-lg border border-slate-200 p-4"
+            >
               <input
                 type="radio"
                 name="paymentMethod"
@@ -74,7 +97,9 @@
               <span class="text-sm font-medium">COD (Cash on Delivery)</span>
             </label>
 
-            <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-slate-200 p-4">
+            <label
+              class="flex cursor-pointer items-center gap-3 rounded-lg border border-slate-200 p-4"
+            >
               <input
                 type="radio"
                 name="paymentMethod"
@@ -86,7 +111,11 @@
           </div>
         </fieldset>
 
-        <p id="checkout-error" class="hidden text-sm text-red-700" role="alert"></p>
+        <p
+          id="checkout-error"
+          class="hidden text-sm text-red-700"
+          role="alert"
+        ></p>
 
         <button
           type="submit"
@@ -97,10 +126,10 @@
       </form>
     </div>
 
-    <aside class="border-t border-slate-200 bg-slate-50 p-6 sm:p-10 md:border-l md:border-t-0">
+    <aside
+      class="border-t border-slate-200 bg-slate-50 p-6 sm:p-10 md:border-l md:border-t-0"
+    >
       <h2 class="text-lg font-semibold">Order summary</h2>
-
-      
 
       <div class="mt-6 border-t border-slate-200 pt-4">
         <p class="flex justify-between gap-4 font-semibold">
@@ -112,23 +141,72 @@
   </div>
 </section>
 <script>
-  $("#checkout-form").submit((e)=>{
-    e.preventDefault()
+  $("#checkout-form").submit((event) => {
+    event.preventDefault();
+    $("#checkout-error").addClass("hidden").text("");
+
     $.ajax({
-      url:"/place-order",
-      method:"post",
-      data:$('#checkout-form').serialize(),
-      success:(response)=>{
-        if(response.status)
-        {
-          location.href="/order-success/"+response.orderId;
+      url: "/place-order",
+      method: "post",
+      data: $("#checkout-form").serialize(),
+      success: (response) => {
+        if (response.codSuccess) {
+          location.href = "/order-success/" + response.orderId;
+          return;
         }
+
+        razorpayPayment(response);
       },
-      error:()=>{
+      error: () => {
         $("#checkout-error")
-          .text("Unable to place your order. Please try again.")
+          .text("Unable to start checkout. Please try again.")
           .removeClass("hidden");
-      }
-      })
-  })
+      },
+    });
+  });
+
+  function razorpayPayment(checkout) {
+    const options = {
+      key: checkout.key,
+      amount: checkout.order.amount,
+      currency: checkout.order.currency,
+      name: "Ecommerce",
+      order_id: checkout.order.id,
+      handler: (payment) => {
+        $.ajax({
+          url: "/verify-payment",
+          method: "post",
+          data: {
+            razorpay_payment_id: payment.razorpay_payment_id,
+            razorpay_order_id: payment.razorpay_order_id,
+            razorpay_signature: payment.razorpay_signature,
+            orderId: checkout.dbOrderId,
+          },
+          success: (response) => {
+            if (response.status) {
+              location.href = "/order-success/" + checkout.dbOrderId;
+            }
+          },
+          error: () => {
+            $("#checkout-error")
+              .text("Payment could not be verified. Please contact support.")
+              .removeClass("hidden");
+          },
+        });
+      },
+      modal: {
+        ondismiss: () => {
+          $("#checkout-error")
+            .text("Payment was not completed.")
+            .removeClass("hidden");
+        },
+      },
+      theme: {
+        color: "#4f46e5",
+      },
+    };
+
+    const razorpay = new Razorpay(options);
+    razorpay.open();
+  }
 </script>

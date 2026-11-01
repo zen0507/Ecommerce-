@@ -5,6 +5,7 @@ const { ObjectId } = require("mongodb");
 const { response } = require("express");
 const { log } = require("handlebars");
 const env = require("dotenv").config();
+const crypto = require("crypto");
 var objectId = require("mongodb").ObjectId;
 const Razorpay = require("razorpay");
 var instance = new Razorpay({
@@ -315,10 +316,12 @@ module.exports = {
       .getDb()
       .collection(collections.ORDER_COLLECTION)
       .insertOne(orderObj);
-    await db
-      .getDb()
-      .collection(collections.CART_COLLECTION)
-      .deleteOne({ user: new objectId(order.userId) });
+    if (order.paymentMethod === "COD") {
+      await db
+        .getDb()
+        .collection(collections.CART_COLLECTION)
+        .deleteOne({ user: new objectId(order.userId) });
+    }
 
     return result.insertedId;
   },
@@ -389,26 +392,76 @@ module.exports = {
       resolve(orders);
     });
   },
-  generateRazorpay: (orderId, total) => {
-    return new Promise((resolve, reject) => {
-      var options = {
-        amount: total * 100, // Razorpay expects amount in paise
-        currency: "INR",
-        receipt: orderId,
-        notes: {
-          key1: "value3",
-          key2: "value2",
-        },
-      };
-      instance.orders.create(options, function (err, order) {
-        if (err) {
-          console.log(err);
-          reject(err);
-        } else {
-          console.log("New Order:", order);
-          resolve(order);
-        }
-      });
+  generateRazorpay: async (orderId, total) => {
+    let razorpayOrder = await instance.orders.create({
+      amount: total * 100,
+      currency: "INR",
+      receipt: orderId,
     });
+
+    await db
+      .getDb()
+      .collection(collections.ORDER_COLLECTION)
+      .updateOne(
+        { _id: new objectId(orderId) },
+        { $set: { razorpayOrderId: razorpayOrder.id } }
+      );
+
+    return razorpayOrder;
+  },
+  verifyPayment: async (payment, userId) => {
+    if (
+      !payment.razorpay_order_id ||
+      !payment.razorpay_payment_id ||
+      !payment.razorpay_signature ||
+      !payment.orderId
+    ) {
+      return false;
+    }
+
+    let expectedSignature = crypto
+      .createHmac("sha256", process.env.key_secret)
+      .update(
+        `${payment.razorpay_order_id}|${payment.razorpay_payment_id}`
+      )
+      .digest("hex");
+    let expectedBuffer = Buffer.from(expectedSignature);
+    let receivedBuffer = Buffer.from(payment.razorpay_signature);
+
+    if (
+      expectedBuffer.length !== receivedBuffer.length ||
+      !crypto.timingSafeEqual(expectedBuffer, receivedBuffer)
+    ) {
+      return false;
+    }
+
+    let result = await db
+      .getDb()
+      .collection(collections.ORDER_COLLECTION)
+      .updateOne(
+        {
+          _id: new objectId(payment.orderId),
+          userId: new objectId(userId),
+          razorpayOrderId: payment.razorpay_order_id,
+          status: "pending",
+        },
+        {
+          $set: {
+            status: "placed",
+            paymentId: payment.razorpay_payment_id,
+          },
+        }
+      );
+
+    if (result.modifiedCount !== 1) {
+      return false;
+    }
+
+    await db
+      .getDb()
+      .collection(collections.CART_COLLECTION)
+      .deleteOne({ user: new objectId(userId) });
+
+    return true;
   },
 };

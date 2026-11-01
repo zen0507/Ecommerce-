@@ -116,26 +116,41 @@ router.get("/place-order", verifyLogin, async (req, res) => {
 
 router.post("/place-order", verifyLogin, async (req, res, next) => {
   try {
+    let paymentMethod = req.body.paymentMethod;
+    if (paymentMethod !== "COD" && paymentMethod !== "Online") {
+      return res.status(400).json({
+        error: "Invalid payment method",
+      });
+    }
+
     let userId = req.session.user._id;
+
     let products = await userHelpers.getCartProductList(userId);
     let total = await userHelpers.getCartTotal(userId);
+
     let orderId = await userHelpers.placeOrder(
-      { ...req.body, userId },
+      { ...req.body, paymentMethod, userId },
       products,
-      total,
+      total
     );
-    if (req.body["payment-method"] === "COD") {
-      res.json({
-        status: true,
+
+    if (paymentMethod === "COD") {
+      return res.json({
+        codSuccess: true,
         orderId: orderId.toString(),
       });
-    } else {
-      userHelpers
-        .generateRazorpay(orderId.toString(), total)
-        .then((response) => {
-          res.json(response);
-        });
     }
+
+    let razorpayOrder = await userHelpers.generateRazorpay(
+      orderId.toString(),
+      total
+    );
+
+    return res.json({
+      key: process.env.key_id,
+      order: razorpayOrder,
+      dbOrderId: orderId.toString(),
+    });
   } catch (error) {
     next(error);
   }
@@ -155,5 +170,24 @@ router.get("/view-order-products/:orderId", verifyLogin, async (req, res) => {
   let products = await userHelpers.getOrderProducts(req.params.orderId);
   let order = await userHelpers.getSingleOrder(req.params.orderId);
   res.render("user/order-products.hbs", { products, order });
+});
+router.post("/verify-payment", verifyLogin, async (req, res, next) => {
+  try {
+    let isPaymentVerified = await userHelpers.verifyPayment(
+      req.body,
+      req.session.user._id
+    );
+
+    if (!isPaymentVerified) {
+      return res.status(400).json({
+        status: false,
+        error: "Payment verification failed",
+      });
+    }
+
+    res.json({ status: true });
+  } catch (error) {
+    next(error);
+  }
 });
 module.exports = router;
