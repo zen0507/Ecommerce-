@@ -1,15 +1,50 @@
 var express = require('express');
 var router = express.Router();
 var productHelpers = require('../helpers/product-helpers')
+var adminHelpers = require('../helpers/admin-helpers')
+
+const verifyLogin = (req, res, next) => {
+  if (req.session.adminloggedIn) {
+    next();
+  } else {
+    res.redirect("/admin/login");
+  }
+};
+router.get("/login", (req, res) => {
+  if (req.session.adminloggedIn) {
+    res.redirect("/admin/");
+  } else {
+    res.render("admin/login", { loginErr: req.session.adminloginErr });
+    req.session.adminloginErr = false;
+  }
+});
+
+router.post("/login", async (req, res, next) => {
+  try {
+    const response = await adminHelpers.doLogin(req.body);
+    if (response.status) {
+      req.session.adminloggedIn = true;
+      req.session.admin = response.admin;
+      res.redirect("/admin/");
+    } else {
+      req.session.adminloginErr = "Invalid username or password";
+      res.redirect("/admin/login");
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.use(verifyLogin);
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
+router.get('/',verifyLogin, function(req, res, next) {
   productHelpers.getAllProducts().then(products=>{
     res.render('admin/view-products',{admin:true,products:products});
   })
 
 });
-router.get('/add-product', function(req, res, next) {
+router.get('/add-product', verifyLogin, function(req, res, next) {
   res.render('admin/add-product');
 })
 
