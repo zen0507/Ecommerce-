@@ -1,125 +1,177 @@
-<div class="mx-auto mt-8 max-w-2xl">
+<div class="min-h-screen bg-gray-50 px-4 py-8 sm:px-6">
 
-  <div class="rounded-lg bg-white p-8 shadow-md">
+  <div class="mx-auto max-w-3xl">
 
-    <h1 class="mb-6 text-2xl font-bold text-gray-800">
-      Add Product
-    </h1>
+    <!-- Page Header -->
+    <div class="mb-7">
+      <h1 class="text-2xl font-bold tracking-tight text-gray-800">
+        Add New Product
+      </h1>
+      <p class="mt-2 text-sm text-gray-500">
+        Enter the product details below to add a new item to your store.
+      </p>
+    </div>
 
-    <form
-      action="/admin/add-product"
-      method="POST"
-      enctype="multipart/form-data"
-    >
+    <!-- Form Card -->
+    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
 
-      <!-- Product Name -->
-      <div class="mb-5">
-        <label for="name" class="mb-2 block text-sm font-medium text-gray-700">
-          Product Name
-        </label>
-
-        <input
-          type="text"
-          id="name"
-          name="name"
-          placeholder="Enter product name"
-          class="w-full rounded-md border border-gray-300 px-4 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-          required
-        />
+      <!-- Card Header -->
+      <div class="border-b border-gray-200 px-6 py-5 sm:px-8">
+        <h2 class="text-base font-semibold text-gray-800">
+          Product Information
+        </h2>
+        <p class="mt-1 text-sm text-gray-500">
+          Fill in all the required product details.
+        </p>
       </div>
 
-      <!-- Category -->
-      <div class="mb-5">
-        <label
-          for="category"
-          class="mb-2 block text-sm font-medium text-gray-700"
-        >
-          Category
-        </label>
+      <!-- Form -->
+      <form
+        action="/admin/add-product"
+        method="POST"
+        enctype="multipart/form-data"
+        class="space-y-6 p-6 sm:p-8"
+      >
 
-        <input
-          type="text"
-          id="category"
-          name="category"
-          placeholder="Enter category"
-          class="w-full rounded-md border border-gray-300 px-4 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-          required
-        />
-      </div>
+        <!-- Product Name -->
+        <div>
+          <label for="name" class="mb-2 block text-sm font-semibold text-gray-700">
+            Product Name
+          </label>
 
-      <!-- Description -->
-      <div class="mb-5">
-        <label
-          for="description"
-          class="mb-2 block text-sm font-medium text-gray-700"
-        >
-          Description
-        </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Enter product name"
+            class="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+            required
+          />
+        </div>
 
-        <textarea
-          id="description"
-          name="description"
-          rows="4"
-          placeholder="Enter product description"
-          class="w-full resize-none rounded-md border border-gray-300 px-4 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-          required
-        ></textarea>
-      </div>
+        <!-- Category -->
+        <div>
+          <label for="category" class="mb-2 block text-sm font-semibold text-gray-700">
+            Category
+          </label>
 
-      <!-- Price -->
-      <div class="mb-5">
-        <label for="price" class="mb-2 block text-sm font-medium text-gray-700">
-          Price
-        </label>
+          <input
+            type="text"
+            id="category"
+            name="category"
+            placeholder="Enter product category"
+            class="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+            required
+          />
+        </div>
 
-        <input
-          type="number"
-          id="price"
-          name="price"
-          placeholder="Enter price"
-          min="0"
-          step="0.01"
-          class="w-full rounded-md border border-gray-300 px-4 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-          required
-        />
-      </div>
+        <!-- Description -->
+        <div>
+          <label for="description" class="mb-2 block text-sm font-semibold text-gray-700">
+            Description
+          </label>
 
-      <!-- Product Image -->
-      <div class="mb-6">
-        <label for="image" class="mb-2 block text-sm font-medium text-gray-700">
-          Product Image
-        </label>
+          <textarea
+            id="description"
+            name="description"
+            rows="5"
+            placeholder="Write a detailed description of the product..."
+            class="w-full resize-y rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+            required
+          ></textarea>
+        </div>
 
-        <input
-          type="file"
-          id="image"
-          name="image"
-          accept="image/*"
-          class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-600"
-          required
-        />
-      </div>
+        <!-- Price -->
+        <div>
+          <label for="price" class="mb-2 block text-sm font-semibold text-gray-700">
+            Price
+          </label>
 
-      <!-- Buttons -->
-      <div class="flex items-center gap-3">
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-gray-500">
+              ₹
+            </span>
 
-        <button
-          type="submit"
-          class="rounded-md bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700"
-        >
-          Add Product
-        </button>
+            <input
+              type="number"
+              id="price"
+              name="price"
+              placeholder="0.00"
+              min="0"
+              step="0.01"
+              class="w-full rounded-lg border border-gray-300 bg-white py-3 pl-9 pr-4 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              required
+            />
+          </div>
+        </div>
 
-        <a
-          href="/admin"
-          class="rounded-md border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
-        >
-          Cancel
-        </a>
+        <!-- Product Image -->
+        <div>
+          <label for="image" class="mb-2 block text-sm font-semibold text-gray-700">
+            Product Image
+          </label>
 
-      </div>
+          <div class="rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-6 text-center transition hover:border-blue-400">
 
-    </form>
+            <div class="mb-3 flex justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-10 w-10 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 7.5L12 3m0 0L7.5 7.5M12 3v13.5"
+                />
+              </svg>
+            </div>
+
+            <label for="image" class="cursor-pointer text-sm font-semibold text-blue-600 hover:text-blue-700">
+              Choose an image
+            </label>
+
+            <p class="mt-1 text-xs text-gray-500">
+              Select a product image from your device.
+            </p>
+
+            <input
+              type="file"
+              id="image"
+              name="image"
+              accept="image/*"
+              class="mt-4 block w-full cursor-pointer text-sm text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
+              required
+            />
+
+          </div>
+        </div>
+
+        <!-- Form Buttons -->
+        <div class="flex flex-col-reverse gap-3 border-t border-gray-100 pt-6 sm:flex-row sm:justify-end">
+
+          <a
+            href="/admin"
+            class="inline-flex items-center justify-center rounded-lg border border-gray-300 px-6 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-100"
+          >
+            Cancel
+          </a>
+
+          <button
+            type="submit"
+            class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          >
+            Add Product
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
 
   </div>
 

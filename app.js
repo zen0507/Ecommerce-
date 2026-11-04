@@ -23,6 +23,11 @@ app.engine(
     defaultLayout: "layout",
     layoutsDir: __dirname + "/views/layouts/",
     partialsDir: __dirname + "/views/partials/",
+    helpers: {
+            addOne: (value) => {
+                return value + 1;
+            }
+        }
   })
 );
 

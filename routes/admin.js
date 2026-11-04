@@ -14,7 +14,7 @@ router.get("/login", (req, res) => {
   if (req.session.adminloggedIn) {
     res.redirect("/admin/");
   } else {
-    res.render("admin/login", { loginErr: req.session.adminloginErr });
+    res.render("admin/login", { loginErr: req.session.adminloginErr,admin:true });
     req.session.adminloginErr = false;
   }
 });
@@ -45,7 +45,7 @@ router.get('/',verifyLogin, function(req, res, next) {
 
 });
 router.get('/add-product', verifyLogin, function(req, res, next) {
-  res.render('admin/add-product');
+  res.render('admin/add-product',{admin:true});
 })
 
 router.post('/add-product',(req,res)=>{
