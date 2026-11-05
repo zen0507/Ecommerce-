@@ -29,7 +29,11 @@ app.engine(
             },
             eq: (value1, value2) => {
                 return value1 === value2;
+            },
+            firstLetter: (value) => {
+                return value ? value.charAt(0).toUpperCase() : "?";
             }
+
         }
   })
 );

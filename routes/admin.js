@@ -93,4 +93,8 @@ router.get('/all-orders',verifyLogin,async(req,res)=>{
   let orders = await adminHelpers.getAllOrders();
   res.render('admin/all-orders',{admin:true,orders});
 })
+router.get('/all-users',verifyLogin,async(req,res)=>{
+  let users = await adminHelpers.getAllUsers();
+  res.render('admin/all-users',{admin:true,users});
+})
 module.exports = router;

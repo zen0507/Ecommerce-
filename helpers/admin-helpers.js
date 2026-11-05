@@ -58,5 +58,15 @@ module.exports = {
             .toArray();
           resolve(orders);
         });
+  },
+  getAllUsers:async()=>{
+    return new Promise(async (resolve, reject) => {
+          let users = await db
+            .getDb()
+            .collection(collections.USER_COLLECTION)
+            .find()
+            .toArray();
+          resolve(users);
+        });
   }
 };

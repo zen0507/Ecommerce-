@@ -1,0 +1,169 @@
+<div class="min-h-screen bg-gray-50 px-4 py-8 sm:px-6">
+
+  <div class="mx-auto max-w-7xl">
+
+    <!-- Page Header -->
+    <div class="mb-7">
+      <h1 class="text-2xl font-bold tracking-tight text-gray-800">
+        All Users
+      </h1>
+
+      <p class="mt-2 text-sm text-gray-500">
+        View and manage registered customers.
+      </p>
+    </div>
+
+    <!-- Total Users Card -->
+    <div class="mb-6">
+      <div class="max-w-xs rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+
+        <p class="text-sm font-medium text-gray-500">
+          Total Registered Users
+        </p>
+
+        <h2 class="mt-2 text-2xl font-bold text-gray-800">
+          {{users.length}}
+        </h2>
+
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+
+      <!-- Table Heading -->
+      <div class="border-b border-gray-200 px-6 py-5">
+
+        <h2 class="text-base font-semibold text-gray-800">
+          Customer Information
+        </h2>
+
+        <p class="mt-1 text-sm text-gray-500">
+          Complete list of registered customers.
+        </p>
+
+      </div>
+
+      <div class="overflow-x-auto">
+
+        <table class="w-full text-left text-sm">
+
+          <!-- Table Header -->
+          <thead class="bg-gray-100">
+
+            <tr class="border-b border-gray-200">
+
+              <th class="whitespace-nowrap px-5 py-4 font-semibold text-gray-700">
+                No.
+              </th>
+
+              <th class="whitespace-nowrap px-5 py-4 font-semibold text-gray-700">
+                Customer Name
+              </th>
+
+              <th class="whitespace-nowrap px-5 py-4 font-semibold text-gray-700">
+                Email Address
+              </th>
+
+              <th class="whitespace-nowrap px-5 py-4 font-semibold text-gray-700">
+                Mobile Number
+              </th>
+
+              <th class="whitespace-nowrap px-5 py-4 font-semibold text-gray-700">
+                Customer ID
+              </th>
+
+            </tr>
+
+          </thead>
+
+          <!-- Table Body -->
+          <tbody class="divide-y divide-gray-100">
+
+            {{#each users}}
+
+              <tr class="transition hover:bg-gray-50">
+
+                <!-- Automatic Number -->
+                <td class="whitespace-nowrap px-5 py-4 text-gray-500">
+                  {{addOne @index}}
+                </td>
+
+                <!-- Customer Name -->
+                <td class="whitespace-nowrap px-5 py-4">
+
+                  <div class="flex items-center gap-3">
+
+                    <div class="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700">
+                      {{firstLetter this.name}}
+                    </div>
+
+                    <span class="font-semibold text-gray-800">
+                      {{this.name}}
+                    </span>
+
+                  </div>
+
+                </td>
+
+                <!-- Email -->
+                <td class="whitespace-nowrap px-5 py-4 text-gray-600">
+                  {{this.email}}
+                </td>
+
+                <!-- Mobile Number -->
+                <td class="whitespace-nowrap px-5 py-4 text-gray-600">
+
+                  {{#if this.phone}}
+                    {{this.phone}}
+                  {{else}}
+                    <span class="text-gray-400">
+                      Not provided
+                    </span>
+                  {{/if}}
+
+                </td>
+
+                <!-- Customer ID -->
+                <td class="whitespace-nowrap px-5 py-4">
+
+                  <span class="text-xs font-medium text-gray-500">
+                    {{this._id}}
+                  </span>
+
+                </td>
+
+              </tr>
+
+            {{else}}
+
+              <!-- Empty State -->
+              <tr>
+
+                <td colspan="5" class="px-5 py-16 text-center">
+
+                  <p class="text-base font-semibold text-gray-700">
+                    No Users Found
+                  </p>
+
+                  <p class="mt-1 text-sm text-gray-500">
+                    Registered customers will appear here.
+                  </p>
+
+                </td>
+
+              </tr>
+
+            {{/each}}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
