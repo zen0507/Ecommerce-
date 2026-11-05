@@ -49,4 +49,14 @@ module.exports = {
       admin: { _id: result.insertedId, email: adminData.email },
     };
   },
+  getAllOrders:async()=>{
+    return new Promise(async (resolve, reject) => {
+          let orders = await db
+            .getDb()
+            .collection(collections.ORDER_COLLECTION)
+            .find()
+            .toArray();
+          resolve(orders);
+        });
+  }
 };
