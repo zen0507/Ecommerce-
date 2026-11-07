@@ -49,84 +49,16 @@ module.exports = {
       admin: { _id: result.insertedId, email: adminData.email },
     };
   },
- 
-getAllOrders: async () => {
-    let orders = await db.getDb()
-        .collection(collections.ORDER_COLLECTION)
-        .aggregate([
-            // Get user information
-            {
-                $lookup: {
-                    from: collections.USER_COLLECTION,
-                    localField: "userId",
-                    foreignField: "_id",
-                    as: "userDetails"
-                }
-            },
-
-            // Convert userDetails array into an object
-            {
-                $unwind: {
-                    path: "$userDetails",
-                    preserveNullAndEmptyArrays: true
-                }
-            },
-
-            // Get product information
-            {
-                $lookup: {
-                    from: collections.PRODUCT_COLLECTION,
-                    localField: "products.item",
-                    foreignField: "_id",
-                    as: "productDetails"
-                }
-            },
-
-            // Combine product information with its quantity
-            {
-                $addFields: {
-                    products: {
-                        $map: {
-                            input: "$products",
-                            as: "orderProduct",
-                            in: {
-                                item: {
-                                    $arrayElemAt: [
-                                        {
-                                            $filter: {
-                                                input: "$productDetails",
-                                                as: "product",
-                                                cond: {
-                                                    $eq: [
-                                                        "$$product._id",
-                                                        "$$orderProduct.item"
-                                                    ]
-                                                }
-                                            }
-                                        },
-                                        0
-                                    ]
-                                },
-                                quantity: "$$orderProduct.quantity"
-                            }
-                        }
-                    }
-                }
-            },
-
-            // Remove temporary productDetails and password
-            {
-                $project: {
-                    productDetails: 0,
-                    "userDetails.password": 0
-                }
-            }
-
-        ]).toArray();
-
-    return orders;
-},
-
+  getAllOrders:async()=>{
+    return new Promise(async (resolve, reject) => {
+          let orders = await db
+            .getDb()
+            .collection(collections.ORDER_COLLECTION)
+            .find()
+            .toArray();
+          resolve(orders);
+        });
+  },
   getAllUsers:async()=>{
     return new Promise(async (resolve, reject) => {
           let users = await db

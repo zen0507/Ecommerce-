@@ -2,4 +2,3 @@ node_modules/
 public/images
 public/product-images
 .env
-.vscode/settings.json
