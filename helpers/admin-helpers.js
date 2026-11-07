@@ -49,16 +49,74 @@ module.exports = {
       admin: { _id: result.insertedId, email: adminData.email },
     };
   },
-  getAllOrders:async()=>{
-    return new Promise(async (resolve, reject) => {
-          let orders = await db
-            .getDb()
-            .collection(collections.ORDER_COLLECTION)
-            .find()
-            .toArray();
-          resolve(orders);
-        });
-  },
+  getAllOrders: async () => {
+    let orders = await db
+        .getDb()
+        .collection(collections.ORDER_COLLECTION)
+        .aggregate([
+            {
+                $lookup: {
+                    from: collections.USER_COLLECTION,
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "userDetails"
+                }
+            },
+            {
+                $unwind: "$userDetails"
+            },
+            {
+                $lookup: {
+                    from: collections.PRODUCT_COLLECTION,
+                    localField: "products.item",
+                    foreignField: "_id",
+                    as: "productDetails"
+                }
+            },
+            {
+                $addFields: {
+                    productDetails: {
+                        $map: {
+                            input: { $ifNull: ["$products", []] },
+                            as: "orderProduct",
+                            in: {
+                                $let: {
+                                    vars: {
+                                        product: {
+                                            $arrayElemAt: [
+                                                {
+                                                    $filter: {
+                                                        input: "$productDetails",
+                                                        as: "product",
+                                                        cond: {
+                                                            $eq: [
+                                                                "$$product._id",
+                                                                "$$orderProduct.item"
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                0
+                                            ]
+                                        }
+                                    },
+                                    in: {
+                                        $mergeObjects: [
+                                            { $ifNull: ["$$product", {}] },
+                                            { quantity: "$$orderProduct.quantity" }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        ])
+        .toArray();
+
+    return orders;
+},
   getAllUsers:async()=>{
     return new Promise(async (resolve, reject) => {
           let users = await db
