@@ -17,7 +17,7 @@ router.get("/login", (req, res) => {
     res.render("admin/login", { loginErr: req.session.adminloginErr,admin:true });
     req.session.adminloginErr = false;
   }
-});
+});//datatables
 
 router.post("/login", async (req, res, next) => {
   try {
