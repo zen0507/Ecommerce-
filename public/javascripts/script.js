@@ -62,3 +62,42 @@ function removeProduct(cartId, proId) {
     },
   });
 }
+
+$(function () {
+  const tables = $(".admin-data-table");
+  const searchForm = document.getElementById("admin-table-search");
+
+  if (!tables.length) {
+    searchForm?.remove();
+    return;
+  }
+
+  if (typeof DataTable === "undefined") {
+    console.error("DataTables did not load; admin table search and sorting are unavailable.");
+    return;
+  }
+
+  const dataTables = tables
+    .toArray()
+    .map((table) =>
+      new DataTable(table, {
+        order: [],
+        columnDefs: [
+          {
+            targets: "_all",
+            orderSequence: ["asc", "desc", ""],
+          },
+        ],
+        language: {
+          emptyTable: "No records available.",
+        },
+      }),
+    );
+
+  searchForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const query = new FormData(searchForm).get("q")?.toString() ?? "";
+
+    dataTables.forEach((table) => table.search(query).draw());
+  });
+});

@@ -8,6 +8,10 @@
     <!-- Tailwind CSS -->
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    {{#if admin}}
+      <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css" />
+      <script src="https://cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
+    {{/if}}
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
   </head>
