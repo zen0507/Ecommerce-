@@ -78,13 +78,13 @@ router.get("/cart", verifyLogin, async (req, res) => {
   });
 });
 
-router.get("/add-to-cart/:id", (req, res) => {
+router.get("/add-to-cart/:id",verifyLogin, (req, res) => {
   userHelpers.addToCart(req.params.id, req.session.user._id).then(() => {
     res.json({ status: true });
   });
 });
 
-router.post("/change-product-quantity", async (req, res, next) => {
+router.post("/change-product-quantity",verifyLogin, async (req, res, next) => {
   try {
     let response = await userHelpers.changeProductQuantity(req.body);
 

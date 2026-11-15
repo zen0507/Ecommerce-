@@ -14,19 +14,24 @@ var instance = new Razorpay({
 });
 
 module.exports = {
-  doSignup: (userData) => {
-    return new Promise(async (resolve, reject) => {
-      userData.password = await bcrypt.hash(userData.password, 10);
-      db.getDb()
-        .collection(collections.USER_COLLECTION)
-        .insertOne(userData)
-        .then((data) => {
-          console.log(data);
+  doSignup: async (userData) => {
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    const result = await db
+      .getDb()
+      .collection(collections.USER_COLLECTION)
+      .insertOne({
+        name: userData.name,
+        email: userData.email,
+        password: hashedPassword,
+      });
 
-          // Return the complete user data
-          resolve(userData);
-        });
-    });
+    return {
+      user: {
+        _id: result.insertedId,
+        name: userData.name,
+        email: userData.email,
+      },
+    };
   },
   doLogin: (userData) => {
     return new Promise(async (resolve, reject) => {
