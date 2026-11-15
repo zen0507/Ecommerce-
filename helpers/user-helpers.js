@@ -194,6 +194,8 @@ module.exports = {
           .updateOne(
             {
               _id: new ObjectId(details.cart),
+              user: new ObjectId(details.userId),
+              "products.item": new ObjectId(details.product),
             },
             {
               $pull: {
@@ -215,6 +217,7 @@ module.exports = {
           .updateOne(
             {
               _id: new ObjectId(details.cart),
+              user: new ObjectId(details.userId),
               "products.item": new ObjectId(details.product),
             },
             {
@@ -232,13 +235,14 @@ module.exports = {
       }
     });
   },
-  removeCartProduct: (details) => {
+  removeCartProduct: (details,userId) => {
     return new Promise((resolve, response) => {
       db.getDb()
         .collection(collections.CART_COLLECTION)
         .updateOne(
           {
             _id: new objectId(details.cart),
+            user: new objectId(userId),
           },
           {
             $pull: {
@@ -350,14 +354,14 @@ module.exports = {
       resolve(orders);
     });
   },
-  getOrderProducts: (orderId) => {
+  getOrderProducts: (orderId, userId) => {
     return new Promise(async (resolve, reject) => {
       let orderProduct = await db
         .getDb()
         .collection(collections.ORDER_COLLECTION)
         .aggregate([
           {
-            $match: { _id: new objectId(orderId) },
+            $match: { _id: new objectId(orderId), userId: new objectId(userId) },
           },
           {
             $unwind: "$products",
@@ -388,12 +392,12 @@ module.exports = {
       resolve(orderProduct);
     });
   },
-  getSingleOrder: (orderId) => {
+  getSingleOrder: (orderId, userId) => {
     return new Promise(async (resolve, reject) => {
       let orders = await db
         .getDb()
         .collection(collections.ORDER_COLLECTION)
-        .findOne({ _id: new objectId(orderId) });
+        .findOne({ _id: new objectId(orderId), userId: new objectId(userId) });
       resolve(orders);
     });
   },

@@ -86,7 +86,7 @@ router.get("/add-to-cart/:id",verifyLogin, (req, res) => {
 
 router.post("/change-product-quantity",verifyLogin, async (req, res, next) => {
   try {
-    let response = await userHelpers.changeProductQuantity(req.body);
+    let response = await userHelpers.changeProductQuantity(req.body,req.session.user._id);
 
     let total = await userHelpers.getCartTotal(req.session.user._id);
 
@@ -97,9 +97,9 @@ router.post("/change-product-quantity",verifyLogin, async (req, res, next) => {
     next(error);
   }
 });
-router.post("/remove-cart-product", async (req, res, next) => {
+router.post("/remove-cart-product", verifyLogin, async (req, res, next) => {
   try {
-    await userHelpers.removeCartProduct(req.body);
+    await userHelpers.removeCartProduct({ ...req.body, userId: req.session.user._id });
 
     let total = await userHelpers.getCartTotal(req.session.user._id);
 
@@ -158,11 +158,24 @@ router.post("/place-order", verifyLogin, async (req, res, next) => {
     next(error);
   }
 });
-router.get("/order-success/:orderId", verifyLogin, (req, res) => {
-  res.render("user/order-success", {
-    orderId: req.params.orderId,
-    user: req.session.user,
-  });
+router.get("/order-success/:orderId", verifyLogin, async (req, res, next) => {
+  try {
+    let order = await userHelpers.getSingleOrder(
+      req.params.orderId,
+      req.session.user._id
+    );
+
+    if (!order) {
+      return res.status(404).send("Order not found");
+    }
+
+    res.render("user/order-success", {
+      orderId: req.params.orderId,
+      user: req.session.user
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 router.get("/orders", verifyLogin, async (req, res) => {
   let orders = await userHelpers.getUserOrders(req.session.user._id);
@@ -170,8 +183,8 @@ router.get("/orders", verifyLogin, async (req, res) => {
   res.render("user/orders", { user: req.session.user, orders });
 });
 router.get("/view-order-products/:orderId", verifyLogin, async (req, res) => {
-  let products = await userHelpers.getOrderProducts(req.params.orderId);
-  let order = await userHelpers.getSingleOrder(req.params.orderId);
+  let products = await userHelpers.getOrderProducts(req.params.orderId, req.session.user._id);
+  let order = await userHelpers.getSingleOrder(req.params.orderId, req.session.user._id);
   res.render("user/order-products.hbs", { products, order });
 });
 router.post("/verify-payment", verifyLogin, async (req, res, next) => {
