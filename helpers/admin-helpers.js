@@ -66,6 +66,11 @@ module.exports = {
                 $unwind: "$userDetails"
             },
             {
+                $project: {
+                    "userDetails.password": 0
+                }
+            },
+            {
                 $lookup: {
                     from: collections.PRODUCT_COLLECTION,
                     localField: "products.item",
@@ -122,9 +127,16 @@ module.exports = {
           let users = await db
             .getDb()
             .collection(collections.USER_COLLECTION)
-            .find()
+            .find(
+                {},
+                {
+                    projection: {
+                        password: 0
+                    }
+                }
+            )
             .toArray();
-          resolve(users);
-        });
+                resolve(users);
+                });
   }
 };
